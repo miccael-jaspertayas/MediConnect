@@ -1,0 +1,50 @@
+## Visual Studio / .NET build artifacts
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## MAUI / Xamarin specific
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+## Build results
+[Aa]rtifacts/
+BenchmarkDotNet.Artifacts/
+
+## macOS
+.DS_Store
+
+## Secrets — never commit real credentials
+appsettings.Development.json
+appsettings.Local.json
+*.pfx
+
+## Test results
+TestResults/
+coverage/*.xml
