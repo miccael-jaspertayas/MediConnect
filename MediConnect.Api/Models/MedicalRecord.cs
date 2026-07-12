@@ -1,7 +1,10 @@
-﻿namespace MediConnect.Api.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MediConnect.Api.Models
 {
     public class MedicalRecord
     {
+        [Key]
         public int RecordID { get; set; }
         public int PatientID { get; set; }
 
