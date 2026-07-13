@@ -69,6 +69,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IVitalsRepository, VitalsRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 
 
