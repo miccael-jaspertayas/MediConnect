@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediConnect.Api.Models;
+﻿using MediConnect.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediConnect.Api.Data
 {
@@ -10,7 +10,10 @@ namespace MediConnect.Api.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
 
+
+
         // Fred and Wendel: add your DbSet<Vitals> / DbSet<MedicalRecord> below
+        public DbSet<Vitals> Vitals { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

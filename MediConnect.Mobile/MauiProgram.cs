@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediConnect.Mobile.Services;
+using MediConnect.Mobile.ViewModels;
+using MediConnect.Mobile.Views;
+using Microsoft.Extensions.Logging;
 
 namespace MediConnect.Mobile
 {
@@ -15,8 +18,17 @@ namespace MediConnect.Mobile
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<SessionService>();
+            builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddTransient<AuthService>();
+
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<RegisterPage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

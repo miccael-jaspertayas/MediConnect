@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<TriageRules>
+	<Rule Keyword="fever" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="chest pain" Weight="5" Tier="Emergency" />
+	<Rule Keyword="difficulty breathing" Weight="5" Tier="Emergency" />
+	<Rule Keyword="persistent cough" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="high fever" Weight="3" Tier="Hospital" />
+</TriageRules>
