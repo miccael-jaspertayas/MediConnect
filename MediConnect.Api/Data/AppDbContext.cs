@@ -1,5 +1,4 @@
 ﻿using MediConnect.Api.Models;
-using MediConnectLite.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediConnect.Api.Data
