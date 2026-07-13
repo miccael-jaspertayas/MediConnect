@@ -1,4 +1,5 @@
 using MediConnect.Api.Data;
+using MediConnect.Api.Repositories;
 using MediConnect.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
 
 var app = builder.Build();
 
