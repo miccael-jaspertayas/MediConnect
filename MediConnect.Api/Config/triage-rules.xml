@@ -2,8 +2,28 @@
 
 <TriageRules>
 	<Rule Keyword="fever" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="chest pain" Weight="5" Tier="Emergency" />
-	<Rule Keyword="difficulty breathing" Weight="5" Tier="Emergency" />
-	<Rule Keyword="persistent cough" Weight="2" Tier="LocalHealthUnit" />
 	<Rule Keyword="high fever" Weight="3" Tier="Hospital" />
+	<Rule Keyword="cough" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="persistent cough" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="sore throat" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="headache" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="body pain" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="fatigue" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="diarrhea" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="vomiting" Weight="3" Tier="Hospital" />
+	<Rule Keyword="nausea" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="dizziness" Weight="2" Tier="Hospital" />
+	<Rule Keyword="abdominal pain" Weight="3" Tier="Hospital" />
+	<Rule Keyword="shortness of breath" Weight="4" Tier="Hospital" />
+	<Rule Keyword="difficulty breathing" Weight="6" Tier="Emergency" />
+	<Rule Keyword="chest pain" Weight="6" Tier="Emergency" />
+	<Rule Keyword="severe bleeding" Weight="7" Tier="Emergency" />
+	<Rule Keyword="loss of consciousness" Weight="8" Tier="Emergency" />
+	<Rule Keyword="seizure" Weight="7" Tier="Emergency" />
+	<Rule Keyword="severe allergic reaction" Weight="7" Tier="Emergency" />
+	<Rule Keyword="numbness on one side" Weight="6" Tier="Emergency" />
+	<Rule Keyword="slurred speech" Weight="6" Tier="Emergency" />
+	<Rule Keyword="rash" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="joint pain" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="chills" Weight="1" Tier="LocalHealthUnit" />
 </TriageRules>

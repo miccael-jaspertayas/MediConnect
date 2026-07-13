@@ -41,7 +41,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddSingleton<TriageService>();
 
 var app = builder.Build();
 
