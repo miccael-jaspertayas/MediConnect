@@ -11,6 +11,7 @@ namespace MediConnect.Api.Data
         public DbSet<Patient> Patients { get; set; }
 
         // Fred and Wendel: add your DbSet<Vitals> / DbSet<MedicalRecord> below
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
