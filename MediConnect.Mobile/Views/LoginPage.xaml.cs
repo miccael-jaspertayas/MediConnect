@@ -1,9 +1,18 @@
-namespace MediConnect.Mobile.Views;
+using MediConnect.Mobile.ViewModels;
 
-public partial class LoginPage : ContentPage
+namespace MediConnect.Mobile.Views
 {
-	public LoginPage()
-	{
-		InitializeComponent();
-	}
+    public partial class LoginPage : ContentPage
+    {
+        public LoginPage(LoginViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = vm;
+        }
+
+        private async void OnRegisterTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//Register");
+        }
+    }
 }
