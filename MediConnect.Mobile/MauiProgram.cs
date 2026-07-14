@@ -19,6 +19,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ApiService>();
         builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<VitalsService>();
         builder.Services.AddSingleton<RecordsService>();
 
 
@@ -34,7 +35,11 @@ public static class MauiProgram
         builder.Services.AddTransient<RecordsPage>();
         builder.Services.AddTransient<AddRecordPage>();
 
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
 
-        return builder.Build();
+            return builder.Build();
+        }
     }
 }

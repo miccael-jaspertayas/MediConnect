@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MediConnect.Mobile.Views.AddVitalsPage"
+             Title="Record Patient Vitals">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Enter Vitals Metrics" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+            <Label Text="Temperature (°C)" FontAttributes="Bold"/>
+            <Entry x:Name="TempEntry" Placeholder="e.g. 36.5" Keyboard="Numeric"/>
+
+            <Label Text="Blood Pressure (mmHg)" FontAttributes="Bold"/>
+            <HorizontalStackLayout Spacing="10">
+                <Entry x:Name="SystolicEntry" Placeholder="Systolic (e.g. 120)" Keyboard="Numeric" WidthRequest="150"/>
+                <Label Text="/" VerticalOptions="Center" FontSize="20"/>
+                <Entry x:Name="DiastolicEntry" Placeholder="Diastolic (e.g. 80)" Keyboard="Numeric" WidthRequest="150"/>
+            </HorizontalStackLayout>
+
+            <Label Text="Heart Rate (bpm)" FontAttributes="Bold"/>
+            <Entry x:Name="HeartRateEntry" Placeholder="e.g. 72" Keyboard="Numeric"/>
+
+            <Label Text="Weight (kg)" FontAttributes="Bold"/>
+            <Entry x:Name="WeightEntry" Placeholder="e.g. 65.0" Keyboard="Numeric"/>
+
+            <Button x:Name="SaveButton" Text="Save Vitals" Clicked="OnSaveVitalsClicked" Margin="0,20,0,0" BackgroundColor="#2196F3" TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
