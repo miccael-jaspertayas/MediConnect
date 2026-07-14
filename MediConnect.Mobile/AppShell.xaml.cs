@@ -1,11 +1,15 @@
-﻿namespace MediConnect.Mobile
+﻿using MediConnect.Mobile.Views;
+
+namespace MediConnect.Mobile
 {
     public partial class AppShell : Shell
     {
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("Profile", typeof(Views.ProfilePage));
+
+            // Register your new vitals page routing string here
+            Routing.RegisterRoute(nameof(AddVitalsPage), typeof(AddVitalsPage));
         }
     }
 }
