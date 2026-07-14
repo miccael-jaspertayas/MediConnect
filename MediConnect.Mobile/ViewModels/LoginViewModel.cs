@@ -39,7 +39,7 @@ namespace MediConnect.Mobile.ViewModels
                 var success = await _authService.LoginAsync(Email, Password);
                 if (success)
                 {
-                    await Shell.Current.GoToAsync("//Dashboard");
+                    await Shell.Current.GoToAsync("//Records");
                 }
                 else
                 {

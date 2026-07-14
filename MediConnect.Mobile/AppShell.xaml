@@ -7,8 +7,10 @@
     
     <ShellContent Route="Login" ContentTemplate="{DataTemplate views:LoginPage}" />
     <ShellContent Route="Register" ContentTemplate="{DataTemplate views:RegisterPage}" />
-
-    <TabBar>
+    <ShellContent Route="Records" ContentTemplate="{DataTemplate views:RecordsPage}" />
+    
+    <!--Remove comment if the pages has been implemented-->
+    <!--<TabBar>
         <ShellContent Route="Dashboard" Title="Home" Icon="home.png"
                       ContentTemplate="{DataTemplate views:DashboardPage}" />
         <ShellContent Route="Vitals" Title="Vitals" Icon="vitals.png"

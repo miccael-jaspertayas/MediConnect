@@ -29,11 +29,10 @@ namespace MediConnect.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-            Post([FromBody] MedicalRecord record)
+        public async Task<IActionResult> Post([FromBody] MedicalRecord record)
         {
-            var created =
-                await _repository.Add(record);
+
+            var created = await _repository.Add(record);
 
             return Ok(created);
         }
