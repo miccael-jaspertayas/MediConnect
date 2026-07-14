@@ -18,14 +18,23 @@ namespace MediConnect.Mobile
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Services
             builder.Services.AddSingleton<SessionService>();
+
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddTransient<AuthService>();
 
+            // ViewModels
             builder.Services.AddTransient<LoginViewModel>();
-            builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<DashboardViewModel>();
+            builder.Services.AddTransient<ProfileViewModel>();
+
+            // Pages
+            builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<DashboardPage>();        
+            builder.Services.AddTransient<ProfilePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

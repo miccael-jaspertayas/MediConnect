@@ -4,7 +4,7 @@ using MediConnect.Mobile.ViewModels;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
-namespace MediConnectLite.Mobile.ViewModels
+namespace MediConnect.Mobile.ViewModels
 {
     public class ProfileViewModel : BaseViewModel
     {
