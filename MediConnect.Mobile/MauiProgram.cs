@@ -26,6 +26,7 @@ namespace MediConnect.Mobile
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<TriagePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -35,3 +36,5 @@ namespace MediConnect.Mobile
         }
     }
 }
+
+
