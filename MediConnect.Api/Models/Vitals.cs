@@ -14,7 +14,7 @@ namespace MediConnect.Api.Models
 
         // Links this data back to Jasper's Patient model
         [ForeignKey("PatientID")]
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
 
         [Required]
         public DateTime RecordedAt { get; set; }
