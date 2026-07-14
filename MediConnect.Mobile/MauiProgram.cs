@@ -21,6 +21,7 @@ namespace MediConnect.Mobile
             builder.Services.AddSingleton<SessionService>();
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddTransient<AuthService>();
+            builder.Services.AddSingleton<VitalsService>();
 
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<LoginPage>();
