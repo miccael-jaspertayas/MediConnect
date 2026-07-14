@@ -1,9 +1,22 @@
-namespace MediConnect.Mobile.Views;
+using MediConnect.Mobile.ViewModels;
 
-public partial class DashboardPage : ContentPage
+namespace MediConnect.Mobile.Views
 {
-	public DashboardPage()
-	{
-		InitializeComponent();
-	}
+    public partial class DashboardPage : ContentPage
+    {
+        private readonly DashboardViewModel _vm;
+
+        public DashboardPage(DashboardViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = _vm = vm;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _vm.OnAppearing();
+        }
+    }
 }
+
