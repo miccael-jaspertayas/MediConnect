@@ -1,19 +1,147 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
-             x:Class="MediConnect.Mobile.Views.LoginPage"
-             x:DataType="vm:LoginViewModel"
-             Title="Login">
-    <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
-        <Label Text="MediConnect" FontSize="24" HorizontalOptions="Center" />
 
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.LoginPage"
+    x:DataType="vm:LoginViewModel"
+    BackgroundColor="#F4F6FA"
+    NavigationPage.HasNavigationBar="False">
 
-        <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="True" /> <!--{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}-->
+    <ScrollView>
 
-        <Button Text="Log In" Command="{Binding LoginCommand}" /> <!--IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"--> 
-        <Button Text="Create an account" Clicked="OnRegisterTapped" BackgroundColor="Transparent" TextColor="Blue" />
-    </VerticalStackLayout>
+        <VerticalStackLayout
+            Padding="25,50"
+            Spacing="18">
+
+            <!-- Spacer -->
+            <VerticalStackLayout HeightRequest="100"/>
+
+            <!-- App Name -->
+            <Label
+                Text="MediConnect"
+                FontSize="34"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                TextColor="#006D7F"/>
+
+            <Label
+                Text="Your Personal Health Companion"
+                FontSize="15"
+                HorizontalOptions="Center"
+                TextColor="#6F7D8B"/>
+
+            <VerticalStackLayout Margin="0,35,0,0"
+                                 Spacing="15">
+
+                <!-- Email -->
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+
+                    <Grid
+                        Padding="14,6"
+                        ColumnDefinitions="35,*">
+
+                        <Label
+                            Text="✉"
+                            FontSize="18"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="#A6AFBD"/>
+
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="Email Address"
+                            Keyboard="Email"
+                            Text="{Binding Email}"
+                            BackgroundColor="Transparent"
+                            TextColor="Black"
+                            PlaceholderColor="#A6AFBD"/>
+                    </Grid>
+
+                </Border>
+
+                <!-- Password -->
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+
+                    <Grid
+                        Padding="14,6"
+                        ColumnDefinitions="35,*,40">
+
+                        <Label
+                            Text="🔒"
+                            FontSize="18"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="#A6AFBD"/>
+
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="Password"
+                            IsPassword="True"
+                            Text="{Binding Password}"
+                            BackgroundColor="Transparent"
+                            TextColor="Black"
+                            PlaceholderColor="#A6AFBD"/>
+
+                        <Button
+                            Grid.Column="2"
+                            Text="👁"
+                            BackgroundColor="Transparent"/>
+                    </Grid>
+
+                </Border>
+
+                <!-- Error -->
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    TextColor="#E5484D"
+                    HorizontalOptions="Center"/>
+
+                <!-- Login -->
+
+            <Button
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="Mag-login / Log In"
+                Command="{Binding LoginCommand}" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Margin="0,25,0,0"
+                HorizontalOptions="Center">
+
+                <Label
+                    Text="Wala pang account?"
+                    TextColor="#6F7D8B"
+                    HorizontalOptions="Center"/>
+
+                <Label
+                    Text="Mag-register / Register"
+                    FontAttributes="Bold"
+                    TextColor="#006D7F"
+                    HorizontalOptions="Center">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding GoToRegisterCommand}"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
 </ContentPage>

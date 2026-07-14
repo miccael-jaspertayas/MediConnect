@@ -11,26 +11,6 @@ public partial class RecordsPage : ContentPage
         BindingContext = vm;
     }
 
-    private void EditButton_Clicked(object sender, EventArgs e)
-    {
-        if (BindingContext is RecordsViewModel vm &&
-            sender is Button button &&
-            button.CommandParameter is MedicalRecord record)
-        {
-            vm.EditRecordCommand.Execute(record);
-        }
-    }
-
-    private void DeleteButton_Clicked(object sender, EventArgs e)
-    {
-        if (BindingContext is RecordsViewModel vm &&
-            sender is Button button &&
-            button.CommandParameter is MedicalRecord record)
-        {
-            vm.DeleteRecordCommand.Execute(record);
-        }
-    }
-
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -38,6 +18,22 @@ public partial class RecordsPage : ContentPage
         if (BindingContext is RecordsViewModel vm)
         {
             await vm.LoadRecordsAsync();
+        }
+    }
+
+    // Navigate to Add Record page
+    private async void AddRecordFab_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AddRecordPage));
+    }
+
+    // Open an existing record for editing
+    private async void RecordCard_Tapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is MedicalRecord record)
+        {
+            await Shell.Current.GoToAsync(
+                $"{nameof(AddRecordPage)}?recordId={record.RecordID}");
         }
     }
 }
