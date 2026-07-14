@@ -2,11 +2,88 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MediConnect.Mobile.Views.VitalsPage"
-             Title="VitalsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Log Vitals"
+             BackgroundColor="#F4F6FA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <!-- Header Section -->
+            <VerticalStackLayout Spacing="4" Margin="0,0,0,10">
+                <Label Text="Track Your Health" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#1A2530" />
+                <Label Text="Enter your current vital signs below to keep your records updated." 
+                       FontSize="14" 
+                       TextColor="#7D848D" />
+            </VerticalStackLayout>
+
+            <!-- Card 1: Heart Rate -->
+            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="heart_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Heart Rate" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="Beats per minute" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
+                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
+                        <Entry x:Name="HeartRateEntry" Placeholder="72" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
+                        <Label Text="bpm" VerticalOptions="Center" TextColor="#7D848D"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Card 2: Blood Pressure -->
+            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="bp_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Blood Pressure" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="Systolic / Diastolic" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
+                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
+                        <Entry x:Name="SystolicEntry" Placeholder="120" Keyboard="Numeric" WidthRequest="60" HorizontalTextAlignment="Center" FontSize="16"/>
+                        <Label Text="/" VerticalOptions="Center" FontSize="18" TextColor="#7D848D"/>
+                        <Entry x:Name="DiastolicEntry" Placeholder="80" Keyboard="Numeric" WidthRequest="60" HorizontalTextAlignment="Center" FontSize="16"/>
+                        <Label Text="mmHg" VerticalOptions="Center" TextColor="#7D848D"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Card 3: Temperature -->
+            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="temp_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Body Temperature" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="Degrees Celsius" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
+                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
+                        <Entry x:Name="TemperatureEntry" Placeholder="36.5" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
+                        <Label Text="°C" VerticalOptions="Center" TextColor="#7D848D"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Card 4: Oxygen Saturation -->
+            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
+                    <Image Grid.Column="0" Grid.RowSpan="2" Source="spo2_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Oxygen Level" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="SpO2 percentage" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
+                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
+                        <Entry x:Name="OxygenEntry" Placeholder="98" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
+                        <Label Text="%" VerticalOptions="Center" TextColor="#7D848D"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Submit Button -->
+            <Button Text="Save Vitals"
+                    Clicked="OnSaveVitalsClicked"
+                    BackgroundColor="#4F46E5"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Margin="0,15,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
