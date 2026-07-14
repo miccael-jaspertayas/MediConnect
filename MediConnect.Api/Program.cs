@@ -107,7 +107,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // Disabled for MAUI local development
-// Keeps http://localhost:5016 working
 // app.UseHttpsRedirection();
 
 app.UseAuthentication();
