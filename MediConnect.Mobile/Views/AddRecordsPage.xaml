@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.AddRecordPage"
+    x:DataType="vm:AddRecordViewModel"
+    Title="Add Record"
+    BackgroundColor="#F4F6FA"
+    NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,15" Spacing="18">
+
+            <!-- Header -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button
+                    Grid.Column="0"
+                    Text="←"
+                    FontSize="20"
+                    TextColor="#1E2A38"
+                    BackgroundColor="Transparent"
+                    Clicked="BackButton_Clicked"
+                    WidthRequest="40"/>
+                <Label
+                    Grid.Column="1"
+                    Text="Add Record"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    TextColor="#1E2A38"
+                    HorizontalOptions="Center"/>
+            </Grid>
+
+            <!-- Field: Date -->
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="4">
+                    <Label Text="Date of Visit (Petsa ng Pagbisita)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="*" TextColor="#E5484D" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+                <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="📅" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <DatePicker Grid.Column="1" Date="{Binding VisitDate}" TextColor="#1E2A38" BackgroundColor="Transparent"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Field: Hospital -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Hospital or Clinic Name" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="➕" FontSize="14" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="e.g., Philippine General Hospital"
+                            Text="{Binding HospitalName}"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Field: Doctor -->
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="4">
+                    <Label Text="Doctor Name (Pangalan ng Doktor)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="(Optional)" FontSize="12" TextColor="#A6AFBD"/>
+                </HorizontalStackLayout>
+                <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="👤" FontSize="14" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="e.g., Dr. House"
+                            Text="{Binding DoctorName}"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Field: Diagnosis -->
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="4">
+                    <Label Text="Diagnosis / Reason for Visit" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="(Optional)" FontSize="12" TextColor="#A6AFBD"/>
+                </HorizontalStackLayout>
+                <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="🩺" FontSize="14" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="e.g., Hypertension monitoring"
+                            Text="{Binding Diagnosis}"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Field: Notes -->
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="4">
+                    <Label Text="Personal Notes (Mga Tala)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="(Optional)" FontSize="12" TextColor="#A6AFBD"/>
+                </HorizontalStackLayout>
+                <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White" Padding="12,10">
+                    <VerticalStackLayout Spacing="4">
+                        <Editor
+                            Placeholder="Add any additional notes about this visit."
+                            HeightRequest="90"
+                            AutoSize="TextChanges"
+                            Text="{Binding Notes}"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"/>
+                        <Label
+                            Text="{Binding Notes.Length, StringFormat='{0} / 500'}"
+                            FontSize="11"
+                            TextColor="#A6AFBD"
+                            HorizontalOptions="End"/>
+                    </VerticalStackLayout>
+                </Border>
+                <Label
+                    Text="Add any additional notes about this visit."
+                    FontSize="12"
+                    TextColor="#1C6F6F"/>
+            </VerticalStackLayout>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#1C6F6F"/>
+
+            <Label Text="{Binding ErrorMessage}" TextColor="#E5484D" FontSize="13"/>
+
+            <!-- Save -->
+            <Button
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="Save Record"
+                Command="{Binding SaveCommand}" />
+
+            <!-- Delete (only when editing an existing record) -->
+            <Button
+                Style="{StaticResource DangerButtonStyle}"
+                Text="Delete Record"
+                Command="{Binding DeleteCommand}"
+                IsVisible="{Binding IsEditing}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

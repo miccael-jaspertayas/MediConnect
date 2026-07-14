@@ -8,7 +8,8 @@ namespace MediConnect.Mobile
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("Profile", typeof(Views.ProfilePage));
+            Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+            Routing.RegisterRoute(nameof(AddRecordPage), typeof(AddRecordPage));
             Routing.RegisterRoute(nameof(AddVitalsPage), typeof(AddVitalsPage));
         }
     }

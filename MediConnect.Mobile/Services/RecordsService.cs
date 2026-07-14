@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Models;
 
 namespace MediConnect.Mobile.Services
 {
@@ -14,6 +11,7 @@ namespace MediConnect.Mobile.Services
             _apiService = apiService;
         }
 
+        // Get all records for a patient
         public async Task<List<MedicalRecord>> GetRecordsAsync(int patientId)
         {
             return await _apiService.GetAsync<List<MedicalRecord>>
@@ -22,6 +20,16 @@ namespace MediConnect.Mobile.Services
             ) ?? new List<MedicalRecord>();
         }
 
+        // Get a single record by RecordID
+        public async Task<MedicalRecord?> GetRecordAsync(int recordId)
+        {
+            return await _apiService.GetAsync<MedicalRecord>
+            (
+                $"api/records/detail/{recordId}"
+            );
+        }
+
+        // Add a new record
         public async Task<MedicalRecord?> AddRecordAsync(MedicalRecord record)
         {
             return await _apiService.PostAsync<MedicalRecord, MedicalRecord>
@@ -31,6 +39,7 @@ namespace MediConnect.Mobile.Services
             );
         }
 
+        // Update an existing record
         public async Task<bool> UpdateRecordAsync(MedicalRecord record)
         {
             return await _apiService.PutAsync
@@ -40,6 +49,7 @@ namespace MediConnect.Mobile.Services
             );
         }
 
+        // Delete a record
         public async Task<bool> DeleteRecordAsync(int recordId)
         {
             return await _apiService.DeleteAsync

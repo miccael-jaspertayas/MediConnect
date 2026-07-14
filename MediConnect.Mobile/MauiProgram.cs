@@ -29,7 +29,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DashboardViewModel>();
         builder.Services.AddTransient<ProfileViewModel>();
         builder.Services.AddTransient<RecordsViewModel>();
-
+        builder.Services.AddTransient<AddRecordViewModel>();
 
         // Pages
         builder.Services.AddTransient<LoginPage>();
@@ -37,6 +37,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DashboardPage>();        
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<RecordsPage>();
+        builder.Services.AddTransient<AddRecordPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -2,113 +2,125 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:MediConnect.Mobile.Models"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.RecordsPage"
-    Title="Medical Records">
+    x:DataType="vm:RecordsViewModel"
+    Title="Health History"
+    BackgroundColor="#F4F6FA">
 
-    <ScrollView>
+    <Grid>
 
-        <VerticalStackLayout
-            Padding="30"
-            Spacing="15">
+        <VerticalStackLayout Padding="20,15" Spacing="14">
 
             <Label
-                Text="Medical Records"
-                FontSize="24"
+                Text="Health History"
+                FontSize="22"
                 FontAttributes="Bold"
+                TextColor="#1C6F6F"
                 HorizontalOptions="Center"/>
 
-            <DatePicker
-                Date="{Binding VisitDate}" />
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding Records}">
 
-            <Entry
-                Placeholder="Hospital / Clinic"
-                Text="{Binding HospitalName}" />
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="30" Spacing="6" HorizontalOptions="Center">
+                            <Label Text="📋" FontSize="34" HorizontalOptions="Center"/>
+                            <Label Text="No medical records yet" FontAttributes="Bold" TextColor="#7A8699" HorizontalOptions="Center"/>
+                            <Label Text="Tap the + button to add one" FontSize="12" TextColor="#A6AFBD" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
 
-            <Entry
-                Placeholder="Doctor"
-                Text="{Binding DoctorName}" />
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                    </CollectionView.ItemsLayout>
 
-            <Entry
-                Placeholder="Diagnosis"
-                Text="{Binding Diagnosis}" />
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:MedicalRecord">
 
-            <Editor
-                Placeholder="Notes"
-                HeightRequest="120"
-                Text="{Binding Notes}" />
+                            <Border
+                                Padding="16"
+                                BackgroundColor="White"
+                                StrokeShape="RoundRectangle 16"
+                                Stroke="Transparent">
 
-            <Button
-                Text="Add Record"
-                Command="{Binding AddRecordCommand}" />
+                                <Border.Shadow>
+                                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                                </Border.Shadow>
 
-            <ActivityIndicator
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}" />
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="RecordCard_Tapped" CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
 
-            <Label
-                Text="{Binding ErrorMessage}"
-                TextColor="Red" />
+                                <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12">
 
-            <Label
-                Text="Medical History"
-                FontSize="20"
-                FontAttributes="Bold"
-                Margin="0,20,0,0"/>
+                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" WidthRequest="34">
+                                        <Label
+                                            Text="{Binding VisitDate, StringFormat='{0:%d}'}"
+                                            FontSize="20" FontAttributes="Bold" TextColor="#1C6F6F"
+                                            HorizontalOptions="Center"/>
+                                        <Label
+                                            Text="{Binding VisitDate, StringFormat='{0:MMM}'}"
+                                            FontSize="11" TextColor="#7FADAB"
+                                            HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
 
-            <CollectionView
-                ItemsSource="{Binding Records}">
+                                    <BoxView Grid.Column="1" WidthRequest="1" BackgroundColor="#E4E9F0"/>
 
-                <CollectionView.EmptyView>
+                                    <VerticalStackLayout Grid.Column="2" Spacing="3" VerticalOptions="Center">
+                                        <Label Text="{Binding HospitalName}" FontSize="16" FontAttributes="Bold" TextColor="#1E2A38"/>
+                                        <Label Text="{Binding DoctorName}" FontSize="13" TextColor="#7A8699"/>
+                                        <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+                                            <Label
+                                                Grid.Column="0"
+                                                Text="{Binding Diagnosis}"
+                                                FontSize="11" TextColor="#1C6F6F"
+                                                BackgroundColor="#E3F1F0" Padding="8,3"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                Text="Tap to view"
+                                                FontSize="11" TextColor="#A6AFBD"
+                                                HorizontalOptions="End" VerticalOptions="Center"/>
+                                        </Grid>
+                                    </VerticalStackLayout>
 
-                    <Label
-                        Text="No medical records found."
-                        HorizontalOptions="Center"
-                        TextColor="Gray"/>
+                                    <Label
+                                        Grid.Column="3"
+                                        Text="›"
+                                        FontSize="22"
+                                        TextColor="#B7C0CC"
+                                        VerticalOptions="Center"/>
 
-                </CollectionView.EmptyView>
+                                </Grid>
 
-                <CollectionView.ItemTemplate>
+                            </Border>
 
-                    <DataTemplate>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-                        <Frame
-                            Margin="0,5"
-                            Padding="10"
-                            BorderColor="LightGray">
-
-                            <VerticalStackLayout Spacing="4">
-
-                                <Label
-                                    Text="{Binding HospitalName}"
-                                    FontSize="18"
-                                    FontAttributes="Bold"/>
-
-                                <Label
-                                    Text="{Binding DoctorName}" />
-
-                                <Label
-                                    Text="{Binding Diagnosis}" />
-
-                                <Label
-                                    Text="{Binding VisitDate, StringFormat='Visit Date: {0:MMMM dd, yyyy}'}"
-                                    FontSize="12"
-                                    TextColor="Gray"/>
-
-                                <Label
-                                    Text="{Binding Notes}" />
-
-                            </VerticalStackLayout>
-
-                        </Frame>
-
-                    </DataTemplate>
-
-                </CollectionView.ItemTemplate>
-
-            </CollectionView>
+                </CollectionView>
+            </ScrollView>
 
         </VerticalStackLayout>
 
-    </ScrollView>
+        <Button
+            Text="+"
+            FontSize="26"
+            FontAttributes="Bold"
+            TextColor="White"
+            BackgroundColor="#1C6F6F"
+            WidthRequest="56"
+            HeightRequest="56"
+            CornerRadius="28"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="0,0,20,24"
+            Clicked="AddRecordFab_Clicked">
+            <Button.Shadow>
+                <Shadow Brush="#1C6F6F" Opacity="0.4" Radius="10" Offset="0,4"/>
+            </Button.Shadow>
+        </Button>
+
+    </Grid>
 
 </ContentPage>

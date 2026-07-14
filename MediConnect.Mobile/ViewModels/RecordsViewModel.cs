@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -13,8 +10,10 @@ namespace MediConnect.Mobile.ViewModels
         private readonly RecordsService _recordsService;
         private readonly SessionService _sessionService;
 
-        public ObservableCollection<MedicalRecord> Records { get; } =
-            new ObservableCollection<MedicalRecord>();
+        private MedicalRecord? _editingRecord;
+
+        public ObservableCollection<MedicalRecord> Records { get; }
+            = new ObservableCollection<MedicalRecord>();
 
         private DateTime _visitDate = DateTime.Today;
         public DateTime VisitDate
@@ -70,15 +69,18 @@ namespace MediConnect.Mobile.ViewModels
             _recordsService = recordsService;
             _sessionService = sessionService;
 
-            LoadRecordsCommand = new Command(async () => await LoadRecordsAsync());
+            LoadRecordsCommand =
+                new Command(async () => await LoadRecordsAsync());
 
-            AddRecordCommand = new Command(async () => await AddRecordAsync());
+            AddRecordCommand =
+                new Command(async () => await AddOrUpdateRecordAsync());
 
-            DeleteRecordCommand = new Command<MedicalRecord>(
-                async (record) => await DeleteRecordAsync(record));
+            DeleteRecordCommand =
+                new Command<MedicalRecord>(async (record) =>
+                    await DeleteRecordAsync(record));
 
-            EditRecordCommand = new Command<MedicalRecord>(
-                async (record) => await EditRecordAsync(record));
+            EditRecordCommand =
+                new Command<MedicalRecord>(EditRecord);
         }
 
         public async Task LoadRecordsAsync()
@@ -93,16 +95,15 @@ namespace MediConnect.Mobile.ViewModels
             {
                 Records.Clear();
 
-                var records = await _recordsService.GetRecordsAsync(_sessionService.PatientID);
+                var records =
+                    await _recordsService.GetRecordsAsync(_sessionService.PatientID);
 
                 records = records
                     .OrderByDescending(r => r.VisitDate)
                     .ToList();
 
                 foreach (var record in records)
-                {
                     Records.Add(record);
-                }
             }
             catch (Exception ex)
             {
@@ -114,7 +115,7 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private async Task AddRecordAsync()
+        private async Task AddOrUpdateRecordAsync()
         {
             if (IsBusy)
                 return;
@@ -124,6 +125,25 @@ namespace MediConnect.Mobile.ViewModels
 
             try
             {
+                // Validation
+                if (VisitDate > DateTime.Today)
+                {
+                    ErrorMessage = "Visit date cannot be in the future.";
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(HospitalName))
+                {
+                    ErrorMessage = "Hospital name is required.";
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(DoctorName))
+                {
+                    ErrorMessage = "Doctor name is required.";
+                    return;
+                }
+
                 var record = new MedicalRecord
                 {
                     PatientID = _sessionService.PatientID,
@@ -134,22 +154,38 @@ namespace MediConnect.Mobile.ViewModels
                     Notes = Notes
                 };
 
-                var added = await _recordsService.AddRecordAsync(record);
-
-                if (added != null)
+                if (_editingRecord == null)
                 {
-                    Records.Insert(0, added);
+                    var added =
+                        await _recordsService.AddRecordAsync(record);
 
-                    VisitDate = DateTime.Today;
-                    HospitalName = string.Empty;
-                    DoctorName = string.Empty;
-                    Diagnosis = string.Empty;
-                    Notes = string.Empty;
+                    if (added == null)
+                    {
+                        ErrorMessage = "Unable to add record.";
+                        return;
+                    }
+
+                    Records.Insert(0, added);
                 }
                 else
                 {
-                    ErrorMessage = "Unable to add record.";
+                    record.RecordID = _editingRecord.RecordID;
+
+                    var success =
+                        await _recordsService.UpdateRecordAsync(record);
+
+                    if (!success)
+                    {
+                        ErrorMessage = "Unable to update record.";
+                        return;
+                    }
+
+                    await LoadRecordsAsync();
+
+                    _editingRecord = null;
                 }
+
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -159,6 +195,20 @@ namespace MediConnect.Mobile.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private void EditRecord(MedicalRecord? record)
+        {
+            if (record == null)
+                return;
+
+            _editingRecord = record;
+
+            VisitDate = record.VisitDate;
+            HospitalName = record.HospitalName;
+            DoctorName = record.DoctorName;
+            Diagnosis = record.Diagnosis;
+            Notes = record.Notes;
         }
 
         private async Task DeleteRecordAsync(MedicalRecord? record)
@@ -173,7 +223,8 @@ namespace MediConnect.Mobile.ViewModels
 
             try
             {
-                var success = await _recordsService.DeleteRecordAsync(record.RecordID);
+                var success =
+                    await _recordsService.DeleteRecordAsync(record.RecordID);
 
                 if (success)
                 {
@@ -194,17 +245,13 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private async Task EditRecordAsync(MedicalRecord? record)
+        private void ClearForm()
         {
-            if (record == null)
-                return;
-
-            var success = await _recordsService.UpdateRecordAsync(record);
-
-            if (!success)
-            {
-                ErrorMessage = "Unable to update record.";
-            }
+            VisitDate = DateTime.Today;
+            HospitalName = string.Empty;
+            DoctorName = string.Empty;
+            Diagnosis = string.Empty;
+            Notes = string.Empty;
         }
     }
 }

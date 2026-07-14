@@ -13,8 +13,8 @@ namespace MediConnect.Api.Repositories
             _context = context;
         }
 
-        public async Task<List<MedicalRecord>>
-            GetByPatientId(int patientId)
+        // Get all records of a patient
+        public async Task<List<MedicalRecord>> GetByPatientId(int patientId)
         {
             return await _context.MedicalRecords
                 .Where(r => r.PatientID == patientId)
@@ -22,24 +22,32 @@ namespace MediConnect.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<MedicalRecord>
-            Add(MedicalRecord record)
+        // Get one record by RecordID
+        public async Task<MedicalRecord?> GetById(int id)
+        {
+            return await _context.MedicalRecords
+                .FirstOrDefaultAsync(r => r.RecordID == id);
+        }
+
+        // Add a new record
+        public async Task<MedicalRecord> Add(MedicalRecord record)
         {
             _context.MedicalRecords.Add(record);
             await _context.SaveChangesAsync();
             return record;
         }
 
+        // Update an existing record
         public async Task Update(MedicalRecord record)
         {
             _context.MedicalRecords.Update(record);
             await _context.SaveChangesAsync();
         }
 
+        // Delete a record
         public async Task Delete(int id)
         {
-            var record =
-                await _context.MedicalRecords.FindAsync(id);
+            var record = await _context.MedicalRecords.FindAsync(id);
 
             if (record != null)
             {
