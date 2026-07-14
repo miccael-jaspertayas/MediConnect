@@ -106,7 +106,7 @@
                     Text="{Binding ErrorMessage}"
                     TextColor="#E5484D"
                     HorizontalOptions="Center"
-                    IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}} />
+                    IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}" />
 
                 <!-- Login -->
 
