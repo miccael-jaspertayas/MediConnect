@@ -135,7 +135,7 @@
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer
-                            Command="{Binding GoToRegisterCommand}"/>
+                            Tapped="OnRegisterTapped"/>
                     </Label.GestureRecognizers>
 
                 </Label>

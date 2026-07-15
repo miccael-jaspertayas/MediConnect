@@ -1,15 +1,16 @@
-using System;
-using Microsoft.Maui.Controls;
-using MediConnect.Mobile.Models;
-using MediConnect.Mobile.Services;
+using MediConnect.Mobile.ViewModels;
 
-namespace MediConnect.Mobile.Views
+namespace MediConnect.Mobile.Views;
+
+public partial class AddVitalsPage : ContentPage
 {
-    public partial class AddVitalsPage : ContentPage
+    public AddVitalsPage(VitalsViewModel vm)
     {
-        private readonly VitalsService _vitalsService;
-        private readonly int _currentPatientId = 1; // Temporarily hardcoded to 1 for testing purposes
+        InitializeComponent();
+        BindingContext = vm;
+    }
 
+<<<<<<< HEAD
         public AddVitalsPage(VitalsService vitalsService)
         {
             InitializeComponent();
@@ -44,5 +45,11 @@ namespace MediConnect.Mobile.Views
                 await DisplayAlertAsync("Error", "Failed to save vitals entry. Please try again.", "OK");
             }
         }
+=======
+    // Go back to the previous page
+    private async void BackButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+>>>>>>> main
     }
 }

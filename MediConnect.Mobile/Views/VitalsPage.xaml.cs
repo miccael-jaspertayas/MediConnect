@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 using System;
 using Microsoft.Maui.Controls;
 using MediConnect.Mobile.Services;
+=======
+using MediConnect.Mobile.Models;
+using MediConnect.Mobile.ViewModels;
+>>>>>>> main
 
-namespace MediConnect.Mobile.Views
+namespace MediConnect.Mobile.Views;
+
+public partial class VitalsPage : ContentPage
 {
-    public partial class VitalsPage : ContentPage
+    public VitalsPage(VitalsViewModel vm)
     {
+<<<<<<< HEAD
         private readonly SessionService _sessionService;
 
         // Constructor Injection (assuming registered in MauiProgram.cs)
@@ -13,10 +21,34 @@ namespace MediConnect.Mobile.Views
         {
             InitializeComponent();
             _sessionService = sessionService;
-        }
+=======
+        InitializeComponent();
+        BindingContext = vm;
+    }
 
-        private async void OnSaveVitalsClicked(object sender, EventArgs e)
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is VitalsViewModel vm)
         {
+            await vm.LoadVitalsAsync();
+>>>>>>> main
+        }
+    }
+
+    // Open Add Vitals page
+    private async void AddVitalsFab_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AddVitalsPage));
+    }
+
+    // Open an existing vital record
+    private async void VitalCard_Tapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is VitalsModel vital)
+        {
+<<<<<<< HEAD
             // 1. Validate Heart Rate (Sane range: 30 to 250 bpm)
             if (!int.TryParse(HeartRateEntry.Text, out int heartRate) || heartRate < 30 || heartRate > 250)
             {
@@ -55,6 +87,10 @@ namespace MediConnect.Mobile.Views
                 await DisplayAlert("Saved", "Vitals updated successfully!", "OK");
                 await Shell.Current.GoToAsync("..");
             }
+=======
+            await Shell.Current.GoToAsync(
+                $"{nameof(AddVitalsPage)}?vitalId={vital.VitalID}");
+>>>>>>> main
         }
     }
 }
