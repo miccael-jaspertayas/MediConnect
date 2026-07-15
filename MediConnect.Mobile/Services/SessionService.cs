@@ -15,12 +15,12 @@ namespace MediConnect.Mobile.Services
         public bool IsLoggedIn => !string.IsNullOrEmpty(Token);
 
         
-        public VitalsModel? MostRecentVital { get; private set; }
+        public Vitals? MostRecentVital { get; private set; }
 
         
-        public event Action<VitalsModel>? OnVitalsUpdated;
+        public event Action<Vitals>? OnVitalsUpdated;
 
-        public void UpdateMostRecentVital(VitalsModel vital)
+        public void UpdateMostRecentVital(Vitals vital)
         {
             MostRecentVital = vital;
             OnVitalsUpdated?.Invoke(vital);

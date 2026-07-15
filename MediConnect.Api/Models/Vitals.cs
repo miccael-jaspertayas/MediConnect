@@ -29,6 +29,6 @@ namespace MediConnect.Api.Models
 
         public int? HeartRate { get; set; }
 
-        public double? Weight { get; set; }
+        public double? SpO2 { get; set; }
     }
 }

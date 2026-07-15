@@ -16,15 +16,21 @@ namespace MediConnect.Api.Controllers
             _vitalsService = vitalsService;
         }
 
-        
+        // GET a single vitals entry by its own ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            
-            return Ok();
+            var vital = await _vitalsService.GetVitalByIdAsync(id);
+
+            if (vital == null)
+            {
+                return NotFound("Vitals record not found.");
+            }
+
+            return Ok(vital);
         }
 
-        // GET
+        // GET all vitals entries for a patient
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetByPatient(int patientId)
         {
@@ -46,7 +52,6 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Invalid Patient ID.");
             }
 
-            
             vitals.VitalID = 0;
 
             var created = await _vitalsService.AddVitalsAsync(vitals);
@@ -56,7 +61,6 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Could not record vitals in database.");
             }
 
-            
             return CreatedAtAction(nameof(GetById), new { id = created.VitalID }, created);
         }
 

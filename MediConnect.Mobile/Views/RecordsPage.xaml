@@ -76,11 +76,6 @@
                                                 Text="{Binding Diagnosis}"
                                                 FontSize="11" TextColor="#1C6F6F"
                                                 BackgroundColor="#E3F1F0" Padding="8,3"/>
-                                            <Label
-                                                Grid.Column="1"
-                                                Text="Tap to view"
-                                                FontSize="11" TextColor="#A6AFBD"
-                                                HorizontalOptions="End" VerticalOptions="Center"/>
                                         </Grid>
                                     </VerticalStackLayout>
 

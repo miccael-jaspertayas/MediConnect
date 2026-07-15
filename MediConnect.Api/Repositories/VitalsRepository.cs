@@ -26,6 +26,12 @@ namespace MediConnect.Api.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Vitals?> GetByIdAsync(int vitalId)
+        {
+            return await _context.Vitals
+                .FirstOrDefaultAsync(v => v.VitalID == vitalId);
+        }
+
         public async Task<Vitals> AddAsync(Vitals vitals)
         {
             _context.Vitals.Add(vitals);

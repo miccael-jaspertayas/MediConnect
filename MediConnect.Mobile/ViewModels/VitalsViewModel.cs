@@ -10,20 +10,7 @@ namespace MediConnect.Mobile.ViewModels
         private readonly VitalsService _vitalsService;
         private readonly SessionService _sessionService;
 
-        public VitalsViewModel(
-            VitalsService vitalsService,
-            SessionService sessionService)
-        {
-            _vitalsService = vitalsService;
-            _sessionService = sessionService;
-
-            Vitals = new ObservableCollection<VitalsModel>();
-
-            LoadVitalsCommand = new Command(async () => await LoadVitalsAsync());
-        }
-
-        // Collection displayed in the Vitals page
-        public ObservableCollection<VitalsModel> Vitals { get; }
+        public ObservableCollection<Vitals> Vitals { get; } = new ObservableCollection<Vitals>();
 
         public ICommand LoadVitalsCommand { get; }
 
@@ -34,11 +21,17 @@ namespace MediConnect.Mobile.ViewModels
             set => SetProperty(ref _errorMessage, value);
         }
 
-        // Loads all vitals for the logged-in patient
+        public VitalsViewModel(VitalsService vitalsService, SessionService sessionService)
+        {
+            _vitalsService = vitalsService;
+            _sessionService = sessionService;
+
+            LoadVitalsCommand = new Command(async () => await LoadVitalsAsync());
+        }
+
         public async Task LoadVitalsAsync()
         {
-            if (IsBusy)
-                return;
+            if (IsBusy) return;
 
             IsBusy = true;
             ErrorMessage = string.Empty;
@@ -49,10 +42,12 @@ namespace MediConnect.Mobile.ViewModels
 
                 var vitals = await _vitalsService.GetVitalsAsync(_sessionService.PatientID);
 
+                vitals = vitals
+                    .OrderByDescending(v => v.RecordedAt)
+                    .ToList();
+
                 foreach (var item in vitals)
-                {
                     Vitals.Add(item);
-                }
             }
             catch (Exception ex)
             {
@@ -64,32 +59,25 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        public async Task DeleteVitalAsync(VitalsModel vital)
+        public async Task DeleteVitalAsync(Vitals vital)
         {
-            if (IsBusy)
-                return;
+            if (IsBusy) return;
 
             IsBusy = true;
             ErrorMessage = string.Empty;
 
             try
             {
-                
-                bool success = await _vitalsService.DeleteVitalsAsync(vital.VitalID);
+                var success = await _vitalsService.DeleteVitalsAsync(vital.VitalID);
 
                 if (success)
-                {
-                    
                     Vitals.Remove(vital);
-                }
                 else
-                {
-                    ErrorMessage = "Failed to delete the record. Please try again.";
-                }
+                    ErrorMessage = "Unable to delete record.";
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Error: " + ex.Message;
+                ErrorMessage = ex.Message;
             }
             finally
             {

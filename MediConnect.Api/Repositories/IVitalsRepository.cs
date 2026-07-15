@@ -7,6 +7,7 @@ namespace MediConnect.Api.Repositories
     public interface IVitalsRepository
     {
         Task<IEnumerable<Vitals>> GetByPatientIdAsync(int patientId);
+        Task<Vitals?> GetByIdAsync(int vitalId);
         Task<Vitals> AddAsync(Vitals vitals);
         Task<bool> UpdateAsync(Vitals vitals);
         Task<bool> DeleteAsync(int vitalId);

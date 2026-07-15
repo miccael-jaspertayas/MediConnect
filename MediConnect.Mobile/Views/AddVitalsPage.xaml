@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
              x:Class="MediConnect.Mobile.Views.AddVitalsPage"
              x:DataType="vm:AddVitalsViewModel"
-             Title="Add Vitals"
+             Title=""
              BackgroundColor="#F4F6FA"
              NavigationPage.HasNavigationBar="False">
 
@@ -37,13 +37,13 @@
                     <Grid ColumnDefinitions="Auto,*" Padding="12,2">
                         <Label Grid.Column="0" Text="🌡️" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
                         <Entry Grid.Column="1" 
-       Margin="0,4" 
-       Keyboard="Numeric" 
-       ReturnType="Next" 
-       Placeholder="36.8" 
-       TextColor="#1E2A38" 
-       BackgroundColor="Transparent"
-       Text="{Binding Temperature, Mode=TwoWay}"/>
+                           Margin="0,4" 
+                           Keyboard="Numeric" 
+                           ReturnType="Next" 
+                           Placeholder="36.8" 
+                           TextColor="#1E2A38" 
+                           BackgroundColor="Transparent"
+                           Text="{Binding Temperature, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
             </VerticalStackLayout>
@@ -60,13 +60,13 @@
                     <Label Grid.Column="1" Text="/" VerticalOptions="Center" FontSize="22" TextColor="#1E2A38"/>
                     <Border Grid.Column="2" Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
                         <Entry Grid.Column="1" 
-       Margin="0,4" 
-       Keyboard="Numeric" 
-       ReturnType="Next" 
-       Placeholder="80" 
-       TextColor="#1E2A38" 
-       BackgroundColor="Transparent"
-       Text="{Binding DiastolicBP, Mode=TwoWay}"/>
+                           Margin="0,4" 
+                           Keyboard="Numeric" 
+                           ReturnType="Next" 
+                           Placeholder="80" 
+                           TextColor="#1E2A38" 
+                           BackgroundColor="Transparent"
+                           Text="{Binding DiastolicBP, Mode=TwoWay}"/>
                     </Border>
                 </Grid>
             </VerticalStackLayout>
@@ -89,20 +89,20 @@
                 </Border>
             </VerticalStackLayout>
 
-            <!-- Weight -->
+            <!-- SpO2 -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Weight (kg)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
+                <Label Text="Blood Oxygen Level (SpO2 %)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
                 <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
                     <Grid ColumnDefinitions="Auto,*" Padding="12,2">
-                        <Label Grid.Column="0" Text="⚖️" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
-                        <Entry Grid.Column="1" 
-       Margin="0,4" 
-       Keyboard="Numeric" 
-       ReturnType="Next" 
-       Placeholder="60" 
-       TextColor="#1E2A38" 
-       BackgroundColor="Transparent"
-       Text="{Binding Weight, Mode=TwoWay}"/>
+                        <Label Grid.Column="0" Text="🫁" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1"
+                   Margin="0,4"
+                   Keyboard="Numeric"
+                   ReturnType="Done"
+                   Placeholder="98"
+                   TextColor="#1E2A38"
+                   BackgroundColor="Transparent"
+                   Text="{Binding SpO2, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
             </VerticalStackLayout>

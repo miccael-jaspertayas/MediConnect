@@ -71,7 +71,7 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private void HandleVitalsUpdated(VitalsModel updatedVitals)
+        private void HandleVitalsUpdated(Vitals updatedVitals)
         {
             
             if (updatedVitals != null)

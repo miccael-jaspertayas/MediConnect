@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MediConnect.Api.Models; 
+using MediConnect.Api.Models;
 using MediConnect.Api.Repositories;
 
 namespace MediConnect.Api.Services
 {
     public class VitalsService
     {
-        
         private readonly IVitalsRepository _vitalsRepository;
 
         public VitalsService(IVitalsRepository vitalsRepository)
@@ -21,9 +20,13 @@ namespace MediConnect.Api.Services
             return await _vitalsRepository.GetByPatientIdAsync(patientId);
         }
 
+        public async Task<Vitals?> GetVitalByIdAsync(int vitalId)
+        {
+            return await _vitalsRepository.GetByIdAsync(vitalId);
+        }
+
         public async Task<Vitals?> AddVitalsAsync(Vitals vitals)
         {
-            vitals.RecordedAt = DateTime.UtcNow; // Ensure consistent timestamps
             return await _vitalsRepository.AddAsync(vitals);
         }
 
