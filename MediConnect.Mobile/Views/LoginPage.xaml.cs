@@ -10,7 +10,7 @@ namespace MediConnect.Mobile.Views
             BindingContext = vm;
         }
 
-        private async void OnRegisterTapped(object sender, EventArgs e)
+        private async void OnRegisterTapped(object? sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//Register");
         }

@@ -8,7 +8,8 @@ namespace MediConnect.Mobile
         {
             InitializeComponent();
 
-            // Register your new vitals page routing string here
+            Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+            Routing.RegisterRoute(nameof(AddRecordPage), typeof(AddRecordPage));
             Routing.RegisterRoute(nameof(AddVitalsPage), typeof(AddVitalsPage));
         }
     }

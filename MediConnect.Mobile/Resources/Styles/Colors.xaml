@@ -41,4 +41,8 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <Color x:Key="PrimaryButtonColor">#006D7F</Color>
+    <Color x:Key="PrimaryButtonHoverColor">#00879C</Color>
+    <Color x:Key="PrimaryButtonPressedColor">#005764</Color>
 </ResourceDictionary>

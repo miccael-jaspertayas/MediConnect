@@ -430,5 +430,93 @@
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
+    
+    
+    <!-- Primary Button Style for MediConnect -->
+    <Style x:Key="PrimaryButtonStyle"
+       TargetType="Button">
 
+        <Setter Property="HeightRequest" Value="55"/>
+        <Setter Property="CornerRadius" Value="28"/>
+        <Setter Property="BackgroundColor" Value="#006D7F"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="17"/>
+
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+
+                <VisualStateGroup x:Name="CommonStates">
+
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                Value="#006D7F"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                Value="#00879C"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                Value="#005764"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                Value="0.5"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                </VisualStateGroup>
+
+            </VisualStateGroupList>
+        </Setter>
+
+    </Style>
+
+    <Style x:Key="DangerButtonStyle"
+       TargetType="Button">
+
+        <Setter Property="HeightRequest" Value="52"/>
+        <Setter Property="CornerRadius" Value="26"/>
+        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="TextColor" Value="#E5484D"/>
+        <Setter Property="BorderColor" Value="#E5484D"/>
+        <Setter Property="BorderWidth" Value="1.5"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+
+                <VisualStateGroup x:Name="CommonStates">
+
+                    <VisualState x:Name="Normal"/>
+
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#FFF2F2"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#FFE5E5"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                </VisualStateGroup>
+
+            </VisualStateGroupList>
+        </Setter>
+
+    </Style>
 </ResourceDictionary>
