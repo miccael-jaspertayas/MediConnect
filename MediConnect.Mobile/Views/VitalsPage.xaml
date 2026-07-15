@@ -6,7 +6,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.VitalsPage"
     x:DataType="vm:VitalsViewModel"
-    Title="Vitals"
+    Title=""
     BackgroundColor="#F4F6FA">
 
     <Grid>

@@ -6,7 +6,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.RecordsPage"
     x:DataType="vm:RecordsViewModel"
-    Title="Health History"
+    Title=""
     BackgroundColor="#F4F6FA">
 
     <Grid>
