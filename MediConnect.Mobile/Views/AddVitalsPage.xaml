@@ -1,239 +1,124 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
-    x:Class="MediConnect.Mobile.Views.AddVitalsPage"
-    x:DataType="vm:AddVitalsViewModel"
-    Title="Add Vitals"
-    BackgroundColor="#F4F6FA"
-    NavigationPage.HasNavigationBar="False">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+             x:Class="MediConnect.Mobile.Views.AddVitalsPage"
+             x:DataType="vm:AddVitalsViewModel"
+             Title="Add Vitals"
+             BackgroundColor="#F4F6FA"
+             NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-
-        <VerticalStackLayout
-            Padding="20,15"
-            Spacing="18">
+        <VerticalStackLayout Padding="20,15" Spacing="18">
 
             <!-- Header -->
             <Grid ColumnDefinitions="Auto,*,Auto">
-
-                <Button
-                    Grid.Column="0"
-                    Text="←"
-                    FontSize="20"
-                    BackgroundColor="Transparent"
-                    TextColor="#1E2A38"
-                    WidthRequest="40"
-                    Clicked="BackButton_Clicked"/>
-
-                <Label
-                    Grid.Column="1"
-                    Text="Add Vitals"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center"
-                    TextColor="#1E2A38"/>
-
+                <Button Grid.Column="0" Text="←" FontSize="20" BackgroundColor="Transparent" 
+                        TextColor="#1E2A38" WidthRequest="40" Clicked="BackButton_Clicked"/>
+                <Label Grid.Column="1" Text="Add Vitals" FontSize="18" FontAttributes="Bold" 
+                       HorizontalOptions="Center" VerticalOptions="Center" TextColor="#1E2A38"/>
             </Grid>
 
             <!-- Date -->
             <VerticalStackLayout Spacing="6">
-
-                <Label
-                    Text="Date Recorded"
-                    FontAttributes="Bold"
-                    FontSize="13"
-                    TextColor="#1E2A38"/>
-
-                <Border
-                    Stroke="#D8DEE8"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="White">
-
-                    <Grid
-                        Padding="12,2"
-                        ColumnDefinitions="Auto,*">
-
-                        <Label
-                            Text="📅"
-                            Margin="0,0,8,0"
-                            VerticalOptions="Center"
-                            TextColor="#1E2A38"/>
-
-                        <DatePicker
-                            Grid.Column="1"
-                            Date="{Binding RecordedAt}"
-                            TextColor="#1E2A38"
-                            BackgroundColor="Transparent"/>
-
+                <Label Text="Date Recorded" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
+                <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="📅" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <DatePicker Grid.Column="1" Date="{Binding RecordedAt, Mode=TwoWay}" TextColor="#1E2A38" BackgroundColor="Transparent"/>
                     </Grid>
-
                 </Border>
-
             </VerticalStackLayout>
 
             <!-- Temperature -->
             <VerticalStackLayout Spacing="6">
-
-                <Label
-                    Text="Body Temperature (°C)"
-                    FontAttributes="Bold"
-                    FontSize="13"
-                    TextColor="#1E2A38"/>
-
-                <Border
-                    Stroke="#D8DEE8"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="White">
-
-                    <Entry
-                        Margin="12,4"
-                        Keyboard="Numeric"
-                        Placeholder="36.8"
-                        PlaceholderColor="#A6AFBD"
-                        TextColor="#1E2A38"
-                        BackgroundColor="Transparent"
-                        Text="{Binding Temperature, TargetNullValue='', StringFormat='{0}'}"/>
-
+                <Label Text="Body Temperature (°C)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
+                <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="🌡️" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1" 
+       Margin="0,4" 
+       Keyboard="Numeric" 
+       ReturnType="Next" 
+       Placeholder="36.8" 
+       TextColor="#1E2A38" 
+       BackgroundColor="Transparent"
+       Text="{Binding Temperature, Mode=TwoWay}"/>
+                    </Grid>
                 </Border>
-
             </VerticalStackLayout>
 
             <!-- Blood Pressure -->
             <VerticalStackLayout Spacing="6">
-
-                <Label
-                    Text="Blood Pressure (mmHg)"
-                    FontAttributes="Bold"
-                    FontSize="13"
-                    TextColor="#1E2A38"/>
-
+                <Label Text="Blood Pressure (mmHg)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
                 <Grid ColumnDefinitions="*,Auto,*">
-
-                    <Border
-                        Grid.Column="0"
-                        Stroke="#D8DEE8"
-                        StrokeShape="RoundRectangle 12"
-                        BackgroundColor="White">
-
-                        <Entry
-                            Margin="12,4"
-                            Keyboard="Numeric"
-                            Placeholder="120"
-                            PlaceholderColor="#A6AFBD"
-                            TextColor="#1E2A38"
-                            BackgroundColor="Transparent"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding SystolicBP, TargetNullValue='', StringFormat='{0}'}"/>
-
+                    <Border Grid.Column="0" Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                        <Entry Margin="12,4" Keyboard="Numeric" ReturnType="Next" Placeholder="120" 
+                               TextColor="#1E2A38" BackgroundColor="Transparent" HorizontalTextAlignment="Center"
+                               Text="{Binding SystolicBP, TargetNullValue='', StringFormat='{0}'}"/>
                     </Border>
-
-                    <Label
-                        Grid.Column="1"
-                        Text="/"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        FontSize="22"
-                        TextColor="#1E2A38"/>
-
-                    <Border
-                        Grid.Column="2"
-                        Stroke="#D8DEE8"
-                        StrokeShape="RoundRectangle 12"
-                        BackgroundColor="White">
-
-                        <Entry
-                            Margin="12,4"
-                            Keyboard="Numeric"
-                            Placeholder="80"
-                            PlaceholderColor="#A6AFBD"
-                            TextColor="#1E2A38"
-                            BackgroundColor="Transparent"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding DiastolicBP, TargetNullValue='', StringFormat='{0}'}"/>
-
+                    <Label Grid.Column="1" Text="/" VerticalOptions="Center" FontSize="22" TextColor="#1E2A38"/>
+                    <Border Grid.Column="2" Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                        <Entry Grid.Column="1" 
+       Margin="0,4" 
+       Keyboard="Numeric" 
+       ReturnType="Next" 
+       Placeholder="80" 
+       TextColor="#1E2A38" 
+       BackgroundColor="Transparent"
+       Text="{Binding DiastolicBP, Mode=TwoWay}"/>
                     </Border>
-
                 </Grid>
-
             </VerticalStackLayout>
 
             <!-- Heart Rate -->
             <VerticalStackLayout Spacing="6">
-
-                <Label
-                    Text="Heart Rate (bpm)"
-                    FontAttributes="Bold"
-                    FontSize="13"
-                    TextColor="#1E2A38"/>
-
-                <Border
-                    Stroke="#D8DEE8"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="White">
-
-                    <Entry
-                        Margin="12,4"
-                        Keyboard="Numeric"
-                        Placeholder="72"
-                        PlaceholderColor="#A6AFBD"
-                        TextColor="#1E2A38"
-                        BackgroundColor="Transparent"
-                        Text="{Binding HeartRate, TargetNullValue='', StringFormat='{0}'}"/>
-
+                <Label Text="Heart Rate (bpm)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
+                <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="❤️" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1" 
+                             Margin="0,4" 
+                             Keyboard="Numeric" 
+                             ReturnType="Next" 
+                            Placeholder="70" 
+                            TextColor="#1E2A38" 
+                            BackgroundColor="Transparent"
+                            Text="{Binding HeartRate, Mode=TwoWay}"/>
+                    </Grid>
                 </Border>
-
             </VerticalStackLayout>
 
             <!-- Weight -->
             <VerticalStackLayout Spacing="6">
-
-                <Label
-                    Text="Weight (kg)"
-                    FontAttributes="Bold"
-                    FontSize="13"
-                    TextColor="#1E2A38"/>
-
-                <Border
-                    Stroke="#D8DEE8"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="White">
-
-                    <Entry
-                        Margin="12,4"
-                        Keyboard="Numeric"
-                        Placeholder="65"
-                        PlaceholderColor="#A6AFBD"
-                        TextColor="#1E2A38"
-                        BackgroundColor="Transparent"
-                        Text="{Binding Weight, TargetNullValue='', StringFormat='{0}'}"/>
-
+                <Label Text="Weight (kg)" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
+                <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
+                        <Label Grid.Column="0" Text="⚖️" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1" 
+       Margin="0,4" 
+       Keyboard="Numeric" 
+       ReturnType="Next" 
+       Placeholder="60" 
+       TextColor="#1E2A38" 
+       BackgroundColor="Transparent"
+       Text="{Binding Weight, Mode=TwoWay}"/>
+                    </Grid>
                 </Border>
-
             </VerticalStackLayout>
 
-            <!-- Error Notification Banner -->
-            <Label
-                Text="{Binding ErrorMessage}"
-                TextColor="#E5484D"
-                HorizontalTextAlignment="Center"
-                FontAttributes="Bold"
-                FontSize="14"/>
-
-            <!-- Loading Indicator -->
-            <ActivityIndicator
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
-                Color="#1C6F6F"/>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#1C6F6F"/>
+            <Label Text="{Binding ErrorMessage}" TextColor="#E5484D" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="14"/>
 
             <!-- Save Action Button -->
-            <Button
-                Style="{StaticResource PrimaryButtonStyle}"
-                Text="Save Vitals"
-                Command="{Binding SaveCommand}"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Text="Save Vitals" Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"/>
+
+            <Button Style="{StaticResource DangerButtonStyle}" 
+        Text="Delete Vitals" 
+        Command="{Binding DeleteCommand}"
+        IsVisible="{Binding IsEditing}" />
 
         </VerticalStackLayout>
-
     </ScrollView>
 </ContentPage>

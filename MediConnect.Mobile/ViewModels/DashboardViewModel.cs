@@ -57,6 +57,8 @@ namespace MediConnect.Mobile.ViewModels
                 if (latest != null)
                 {
                     _session.UpdateMostRecentVital(latest);
+
+                    LatestVitalsSummary = $"Latest Vitals: HR {latest.HeartRate}bpm, BP {latest.SystolicBP}/{latest.DiastolicBP}, Temp {latest.Temperature}°C";
                 }
                 else
                 {
