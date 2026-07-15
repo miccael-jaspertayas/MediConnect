@@ -1,4 +1,6 @@
 ﻿using Microsoft.Maui.Storage;
+using System;
+using System.Threading.Tasks;
 
 namespace MediConnect.Mobile.Services
 {
@@ -10,6 +12,19 @@ namespace MediConnect.Mobile.Services
         public int PatientID { get; private set; }
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(Token);
+
+        
+        public VitalModel? MostRecentVital { get; private set; }
+
+        
+        public event Action<VitalModel>? OnVitalsUpdated;
+
+        public void UpdateMostRecentVital(VitalModel vital)
+        {
+            MostRecentVital = vital;
+            OnVitalsUpdated?.Invoke(vital);
+        }
+        
 
         public void SetSession(string token, int userId, int patientId)
         {
@@ -45,7 +60,18 @@ namespace MediConnect.Mobile.Services
             Token = null;
             UserID = 0;
             PatientID = 0;
+            MostRecentVital = null; 
             SecureStorage.RemoveAll();
         }
+    }
+
+    
+    public class VitalModel
+    {
+        public int Id { get; set; }
+        public int PatientId { get; set; }
+        public int HeartRate { get; set; }
+        public double Temperature { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }

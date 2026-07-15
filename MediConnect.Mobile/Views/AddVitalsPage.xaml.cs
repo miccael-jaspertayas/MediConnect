@@ -35,13 +35,13 @@ namespace MediConnect.Mobile.Views
 
             if (isSuccess)
             {
-                await DisplayAlert("Success", "Vitals recorded successfully!", "OK");
+                await DisplayAlertAsync("Success", "Vitals recorded successfully!", "OK");
                 // Clear out the forms
                 TempEntry.Text = SystolicEntry.Text = DiastolicEntry.Text = HeartRateEntry.Text = WeightEntry.Text = string.Empty;
             }
             else
             {
-                await DisplayAlert("Error", "Failed to save vitals entry. Please try again.", "OK");
+                await DisplayAlertAsync("Error", "Failed to save vitals entry. Please try again.", "OK");
             }
         }
     }
