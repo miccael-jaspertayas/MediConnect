@@ -20,12 +20,17 @@ namespace MediConnect.Mobile.ViewModels
         private string _errorMessage = string.Empty;
         public string ErrorMessage { get => _errorMessage; set => SetProperty(ref _errorMessage, value); }
 
+        private bool _isPasswordHidden = true;
+        public bool IsPasswordHidden { get => _isPasswordHidden; set => SetProperty(ref _isPasswordHidden, value); }
+
+        public ICommand TogglePasswordCommand { get; }
         public ICommand LoginCommand { get; }
 
         public LoginViewModel(AuthService authService)
         {
             _authService = authService;
             LoginCommand = new Command(async () => await LoginAsync());
+            TogglePasswordCommand = new Command(() => IsPasswordHidden = !IsPasswordHidden);
         }
 
         private async Task LoginAsync()
