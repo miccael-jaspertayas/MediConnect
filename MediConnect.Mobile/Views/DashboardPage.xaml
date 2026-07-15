@@ -5,7 +5,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.DashboardPage"
     x:DataType="vm:DashboardViewModel"
-    Title="Home"
+    Title=""
     BackgroundColor="#F4F6FA">
 
     <ScrollView>
