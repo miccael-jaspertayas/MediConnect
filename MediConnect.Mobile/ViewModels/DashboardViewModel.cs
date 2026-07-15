@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows.Input;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
 using MediConnect.Mobile.Services;
 
 namespace MediConnect.Mobile.ViewModels
@@ -9,11 +10,11 @@ namespace MediConnect.Mobile.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly SessionService _session;
+        private readonly VitalsService _vitalsService;
 
         private string _greeting = "Welcome!";
         public string Greeting { get => _greeting; set => SetProperty(ref _greeting, value); }
 
-        // Placeholder until Fred's Vitals endpoint is live
         private string _latestVitalsSummary = "No vitals recorded yet.";
         public string LatestVitalsSummary { get => _latestVitalsSummary; set => SetProperty(ref _latestVitalsSummary, value); }
 
@@ -23,21 +24,53 @@ namespace MediConnect.Mobile.ViewModels
         public ICommand GoToProfileCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        public DashboardViewModel(SessionService session)
+        public DashboardViewModel(SessionService session, VitalsService vitalsService)
         {
             _session = session;
+            _vitalsService = vitalsService;
 
             GoToVitalsCommand = new Command(async () => await Shell.Current.GoToAsync("//Vitals"));
             GoToRecordsCommand = new Command(async () => await Shell.Current.GoToAsync("//Records"));
             GoToTriageCommand = new Command(async () => await Shell.Current.GoToAsync("//Triage"));
             GoToProfileCommand = new Command(async () => await Shell.Current.GoToAsync("Profile"));
             LogoutCommand = new Command(Logout);
+
+            // Subscribe to real-time additions of new vitals
+            _session.OnVitalsUpdated += HandleVitalsUpdated;
         }
 
-        public void OnAppearing()
+        public async void OnAppearing()
         {
             Greeting = "Welcome back!";
-            // TODO (Fred, once Vitals GET exists): call VitalsService here and set LatestVitalsSummary to the most recent entry.
+            await LoadLatestVitalsSummaryAsync();
+        }
+
+        private async Task LoadLatestVitalsSummaryAsync()
+        {
+            try
+            {
+                // Retrieve the actual vitals from the API service
+                var vitalsList = await _vitalsService.GetVitalsAsync(_session.PatientID);
+                var latest = vitalsList.OrderByDescending(v => v.RecordedAt).FirstOrDefault();
+
+                if (latest != null)
+                {
+                    _session.UpdateMostRecentVital(latest);
+                }
+                else
+                {
+                    LatestVitalsSummary = "No vitals recorded yet.";
+                }
+            }
+            catch
+            {
+                LatestVitalsSummary = "Unable to fetch vitals summary.";
+            }
+        }
+
+        private void HandleVitalsUpdated(Models.VitalsModel vital)
+        {
+            LatestVitalsSummary = $"Latest Vitals ({vital.RecordedAt:MM/dd}): Temp: {vital.Temperature}°C, HR: {vital.HeartRate} bpm, BP: {vital.SystolicBP}/{vital.DiastolicBP}";
         }
 
         private void Logout()
