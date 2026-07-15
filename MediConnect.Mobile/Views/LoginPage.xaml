@@ -110,11 +110,11 @@
 
                 <!-- Login -->
 
-            <Button
-                Style="{StaticResource PrimaryButtonStyle}"
-                Text="Mag-login / Log In"
-                Command="{Binding LoginCommand}" 
-                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                <Button
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="Mag-login / Log In"
+                    Command="{Binding LoginCommand}" 
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
 
             </VerticalStackLayout>
 
