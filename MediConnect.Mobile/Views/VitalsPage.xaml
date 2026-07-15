@@ -1,89 +1,158 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MediConnect.Mobile.Views.VitalsPage"
-             Title="Log Vitals"
-             BackgroundColor="#F4F6FA">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:MediConnect.Mobile.Models"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.VitalsPage"
+    x:DataType="vm:VitalsViewModel"
+    Title="Vitals"
+    BackgroundColor="#F4F6FA">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="18">
+    <Grid>
 
-            <!-- Header Section -->
-            <VerticalStackLayout Spacing="4" Margin="0,0,0,10">
-                <Label Text="Track Your Health" 
-                       FontSize="24" 
-                       FontAttributes="Bold" 
-                       TextColor="#1A2530" />
-                <Label Text="Enter your current vital signs below to keep your records updated." 
-                       FontSize="14" 
-                       TextColor="#7D848D" />
-            </VerticalStackLayout>
+        <VerticalStackLayout
+            Padding="20,15"
+            Spacing="14">
 
-            <!-- Card 1: Heart Rate -->
-            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
-                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="heart_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
-                    <Label Grid.Column="1" Grid.Row="0" Text="Heart Rate" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
-                    <Label Grid.Column="1" Grid.Row="1" Text="Beats per minute" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
-                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
-                        <Entry x:Name="HeartRateEntry" Placeholder="72" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
-                        <Label Text="bpm" VerticalOptions="Center" TextColor="#7D848D"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
+            <Label
+                Text="Vitals History"
+                FontSize="22"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                TextColor="#1C6F6F"/>
 
-            <!-- Card 2: Blood Pressure -->
-            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
-                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="bp_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
-                    <Label Grid.Column="1" Grid.Row="0" Text="Blood Pressure" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
-                    <Label Grid.Column="1" Grid.Row="1" Text="Systolic / Diastolic" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
-                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
-                        <Entry x:Name="SystolicEntry" Placeholder="120" Keyboard="Numeric" WidthRequest="60" HorizontalTextAlignment="Center" FontSize="16"/>
-                        <Label Text="/" VerticalOptions="Center" FontSize="18" TextColor="#7D848D"/>
-                        <Entry x:Name="DiastolicEntry" Placeholder="80" Keyboard="Numeric" WidthRequest="60" HorizontalTextAlignment="Center" FontSize="16"/>
-                        <Label Text="mmHg" VerticalOptions="Center" TextColor="#7D848D"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
+            <CollectionView ItemsSource="{Binding Vitals}">
 
-            <!-- Card 3: Temperature -->
-            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
-                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="temp_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
-                    <Label Grid.Column="1" Grid.Row="0" Text="Body Temperature" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
-                    <Label Grid.Column="1" Grid.Row="1" Text="Degrees Celsius" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
-                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
-                        <Entry x:Name="TemperatureEntry" Placeholder="36.5" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
-                        <Label Text="°C" VerticalOptions="Center" TextColor="#7D848D"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
+                <CollectionView.EmptyView>
 
-            <!-- Card 4: Oxygen Saturation -->
-            <Border StrokeShape="RoundRectangle 12" BackgroundColor="White" Padding="16" StrokeThickness="0">
-                <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="8">
-                    <Image Grid.Column="0" Grid.RowSpan="2" Source="spo2_icon.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"/>
-                    <Label Grid.Column="1" Grid.Row="0" Text="Oxygen Level" FontAttributes="Bold" TextColor="#1A2530" FontSize="16" VerticalOptions="End"/>
-                    <Label Grid.Column="1" Grid.Row="1" Text="SpO2 percentage" TextColor="#7D848D" FontSize="12" VerticalOptions="Start"/>
-                    <HorizontalStackLayout Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Spacing="4">
-                        <Entry x:Name="OxygenEntry" Placeholder="98" Keyboard="Numeric" WidthRequest="80" HorizontalTextAlignment="Center" FontSize="16"/>
-                        <Label Text="%" VerticalOptions="Center" TextColor="#7D848D"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
+                    <VerticalStackLayout
+                        Padding="40"
+                        HorizontalOptions="Center"
+                        Spacing="8">
 
-            <!-- Submit Button -->
-            <Button Text="Save Vitals"
-                    Clicked="OnSaveVitalsClicked"
-                    BackgroundColor="#4F46E5"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    CornerRadius="10"
-                    HeightRequest="50"
-                    Margin="0,15,0,0"/>
+                        <Label
+                            Text="❤️"
+                            FontSize="40"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="No vitals recorded yet"
+                            FontAttributes="Bold"
+                            TextColor="#7A8699"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="Tap the + button to add your first entry."
+                            FontSize="12"
+                            TextColor="#A6AFBD"
+                            HorizontalOptions="Center"/>
+
+                    </VerticalStackLayout>
+
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="12"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate x:DataType="models:VitalsModel">
+
+                        <Border
+                            Padding="16"
+                            BackgroundColor="White"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="Transparent">
+
+                            <Border.Shadow>
+                                <Shadow
+                                    Brush="#000000"
+                                    Radius="8"
+                                    Opacity="0.06"
+                                    Offset="0,2"/>
+                            </Border.Shadow>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Tapped="VitalCard_Tapped"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <VerticalStackLayout Spacing="8">
+
+                                <Label
+                                    Text="{Binding RecordedAt, StringFormat='{}{0:MMMM dd, yyyy}'}"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    TextColor="#1C6F6F"/>
+
+                                <Grid ColumnDefinitions="*,*">
+
+                                    <Label
+                                        Grid.Column="0"
+                                        Text="{Binding HeartRate, StringFormat='Heart Rate: {0} bpm'}"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Temperature, StringFormat='Temp: {0} °C'}"/>
+
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*">
+
+                                    <Label
+                                        Grid.Column="0"
+                                        Text="{Binding SystolicBP, StringFormat='BP: {0}'}"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding DiastolicBP, StringFormat='/ {0}'}"/>
+
+                                </Grid>
+
+                                <Label
+                                    Text="{Binding Weight, StringFormat='Weight: {0} kg'}"/>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
 
         </VerticalStackLayout>
-    </ScrollView>
+
+        <Button
+            Text="+"
+            FontSize="26"
+            FontAttributes="Bold"
+            TextColor="White"
+            BackgroundColor="#1C6F6F"
+            WidthRequest="56"
+            HeightRequest="56"
+            CornerRadius="28"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="20"
+            Clicked="AddVitalsFab_Clicked">
+
+            <Button.Shadow>
+                <Shadow
+                    Brush="#1C6F6F"
+                    Radius="10"
+                    Opacity="0.4"
+                    Offset="0,4"/>
+            </Button.Shadow>
+
+        </Button>
+
+    </Grid>
+
 </ContentPage>

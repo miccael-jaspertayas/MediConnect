@@ -31,14 +31,19 @@ public static class MauiProgram
         builder.Services.AddTransient<ProfileViewModel>();
         builder.Services.AddTransient<RecordsViewModel>();
         builder.Services.AddTransient<AddRecordViewModel>();
+        builder.Services.AddTransient<VitalsViewModel>();
+        builder.Services.AddTransient<AddVitalsViewModel>();
+
 
         // Pages
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<RegisterPage>();
-        builder.Services.AddTransient<DashboardPage>();        
+        builder.Services.AddTransient<DashboardPage>();
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<RecordsPage>();
         builder.Services.AddTransient<AddRecordPage>();
+        builder.Services.AddTransient<VitalsPage>();
+        builder.Services.AddTransient<AddVitalsPage>();
         builder.Services.AddTransient<TriagePage>();
 
 #if DEBUG

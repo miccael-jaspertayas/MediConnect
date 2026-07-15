@@ -1,33 +1,54 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Models;
 
 namespace MediConnect.Mobile.Services
 {
     public class VitalsService
     {
-        private readonly HttpClient _httpClient;
-        private const string BaseUrl = "api/vitals";
+        private readonly ApiService _apiService;
 
-        public VitalsService(HttpClient httpClient)
+        public VitalsService(ApiService apiService)
         {
-            _httpClient = httpClient;
+            _apiService = apiService;
         }
 
-        // GET: Fetch patient vitals history
-        public async Task<List<VitalsModel>> GetVitalsByPatientIdAsync(int patientId)
+        // Get all vitals for a patient
+        public async Task<List<VitalsModel>> GetVitalsAsync(int patientId)
         {
-            return await _httpClient.GetFromJsonAsync<List<VitalsModel>>($"{BaseUrl}/patient/{patientId}")
-                   ?? new List<VitalsModel>();
+            return await _apiService.GetAsync<List<VitalsModel>>
+            (
+                $"api/vitals/patient/{patientId}"
+            ) ?? new List<VitalsModel>();
         }
 
-        // POST: Add new vital entry from the app
+        // Add a new vitals record
         public async Task<bool> AddVitalsAsync(VitalsModel vitals)
         {
-            var response = await _httpClient.PostAsJsonAsync(BaseUrl, vitals);
-            return response.IsSuccessStatusCode;
+            var result = await _apiService.PostAsync<VitalsModel, VitalsModel>
+            (
+                "api/vitals",
+                vitals
+            );
+
+            return result != null;
+        }
+
+        // Update an existing vitals record
+        public async Task<bool> UpdateVitalsAsync(VitalsModel vitals)
+        {
+            return await _apiService.PutAsync
+            (
+                $"api/vitals/{vitals.VitalID}",
+                vitals
+            );
+        }
+
+        // Delete a vitals record
+        public async Task<bool> DeleteVitalsAsync(int vitalId)
+        {
+            return await _apiService.DeleteAsync
+            (
+                $"api/vitals/{vitalId}"
+            );
         }
     }
 }
