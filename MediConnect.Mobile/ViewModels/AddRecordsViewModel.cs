@@ -39,6 +39,8 @@ namespace MediConnect.Mobile.ViewModels
 
                 OnPropertyChanged(nameof(IsEditing));
 
+                (DeleteCommand as Command)?.ChangeCanExecute();
+
                 if (value != null)
                 {
                     VisitDate = value.VisitDate;
