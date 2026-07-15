@@ -34,6 +34,7 @@ public static class MauiProgram
         builder.Services.AddTransient<AddRecordViewModel>();
         builder.Services.AddTransient<VitalsViewModel>();
         builder.Services.AddTransient<AddVitalsViewModel>();
+        builder.Services.AddTransient<TriageViewModel>();
 
 
         // Pages
