@@ -1,5 +1,6 @@
 using MediConnect.Mobile.ViewModels;
 
+
 namespace MediConnect.Mobile.Views
 {
     public partial class DashboardPage : ContentPage
@@ -16,6 +17,8 @@ namespace MediConnect.Mobile.Views
         {
             base.OnAppearing();
             _vm.OnAppearing();
+
+           
         }
     }
 }

@@ -1,18 +1,22 @@
+using System;
+using Microsoft.Maui.Controls;
 using MediConnect.Mobile.ViewModels;
 
-namespace MediConnect.Mobile.Views;
-
-public partial class AddVitalsPage : ContentPage
+namespace MediConnect.Mobile.Views
 {
-    public AddVitalsPage(VitalsViewModel vm)
+    public partial class AddVitalsPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = vm;
-    }
+        
+        public AddVitalsPage(AddVitalsViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = vm;
+        }
 
-    // Go back to the previous page
-    private async void BackButton_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("..");
+        
+        private async void BackButton_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }

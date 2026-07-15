@@ -1,38 +1,94 @@
-﻿using MediConnect.Api.Models;
-using MediConnect.Api.Repositories;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using MediConnect.Api.Models;
+using MediConnect.Api.Services;
 
-namespace MediConnectLite.Api.Controllers
+namespace MediConnect.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class VitalsController : ControllerBase
     {
-        private readonly IVitalsRepository _repository;
+        private readonly VitalsService _vitalsService;
 
-        public VitalsController(IVitalsRepository repository)
+        public VitalsController(VitalsService vitalsService)
         {
-            _repository = repository;
+            _vitalsService = vitalsService;
         }
 
-        // POST: api/vitals
-        [HttpPost]
-        public async Task<IActionResult> AddVitals([FromBody] Vitals vitals)
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var createdVitals = await _repository.AddVitalsAsync(vitals);
-            return Ok(createdVitals);
+            
+            return Ok();
         }
 
-        // GET: api/vitals/patient/{patientId}
+        // GET
         [HttpGet("patient/{patientId}")]
-        public async Task<IActionResult> GetVitalsByPatient(int patientId)
+        public async Task<IActionResult> GetByPatient(int patientId)
         {
-            var vitalsList = await _repository.GetVitalsByPatientIdAsync(patientId);
-            return Ok(vitalsList);
+            var vitals = await _vitalsService.GetVitalsByPatientIdAsync(patientId);
+            return Ok(vitals);
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Vitals vitals)
+        {
+            if (vitals == null)
+            {
+                return BadRequest("Vitals data is null.");
+            }
+
+            if (vitals.PatientID <= 0)
+            {
+                return BadRequest("Invalid Patient ID.");
+            }
+
+            
+            vitals.VitalID = 0;
+
+            var created = await _vitalsService.AddVitalsAsync(vitals);
+
+            if (created == null)
+            {
+                return BadRequest("Could not record vitals in database.");
+            }
+
+            
+            return CreatedAtAction(nameof(GetById), new { id = created.VitalID }, created);
+        }
+
+        // PUT
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] Vitals vitals)
+        {
+            if (vitals == null || id != vitals.VitalID)
+            {
+                return BadRequest("ID mismatch.");
+            }
+
+            var success = await _vitalsService.UpdateVitalsAsync(vitals);
+            if (!success)
+            {
+                return NotFound("Record not found or no changes made.");
+            }
+
+            return NoContent();
+        }
+
+        // DELETE
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _vitalsService.DeleteVitalsAsync(id);
+            if (!success)
+            {
+                return NotFound("Record not found.");
+            }
+
+            return NoContent();
         }
     }
 }

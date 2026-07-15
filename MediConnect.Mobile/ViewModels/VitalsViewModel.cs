@@ -63,5 +63,38 @@ namespace MediConnect.Mobile.ViewModels
                 IsBusy = false;
             }
         }
+
+        public async Task DeleteVitalAsync(VitalsModel vital)
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            try
+            {
+                
+                bool success = await _vitalsService.DeleteVitalsAsync(vital.VitalID);
+
+                if (success)
+                {
+                    
+                    Vitals.Remove(vital);
+                }
+                else
+                {
+                    ErrorMessage = "Failed to delete the record. Please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Error: " + ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
     }
 }

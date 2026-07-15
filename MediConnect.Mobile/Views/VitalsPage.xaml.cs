@@ -11,29 +11,32 @@ public partial class VitalsPage : ContentPage
         BindingContext = vm;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        if (BindingContext is VitalsViewModel vm)
+        
+        if (BindingContext is VitalsViewModel viewModel)
         {
-            await vm.LoadVitalsAsync();
+            _ = viewModel.LoadVitalsAsync();
         }
     }
 
-    // Open Add Vitals page
+    
     private async void AddVitalsFab_Clicked(object sender, EventArgs e)
     {
+       
         await Shell.Current.GoToAsync(nameof(AddVitalsPage));
     }
 
-    // Open an existing vital record
+    
     private async void VitalCard_Tapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is VitalsModel vital)
         {
+            
             await Shell.Current.GoToAsync(
-                $"{nameof(AddVitalsPage)}?vitalId={vital.VitalID}");
+                $"{nameof(AddVitalsPage)}?VitalId={vital.VitalID}");
         }
     }
 }
