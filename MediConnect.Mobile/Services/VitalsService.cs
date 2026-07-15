@@ -1,99 +1,54 @@
-﻿using System;
-using System.Text;
-using System.Text.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Models;
 
 namespace MediConnect.Mobile.Services
 {
     public class VitalsService
     {
-        private readonly HttpClient _httpClient;
+        private readonly ApiService _apiService;
 
-        public VitalsService(HttpClient httpClient)
+        public VitalsService(ApiService apiService)
         {
-            _httpClient = httpClient;
+            _apiService = apiService;
         }
 
-        // GET: api/vitals/patient/{patientId}
+        // Get all vitals for a patient
         public async Task<List<VitalsModel>> GetVitalsAsync(int patientId)
         {
-            try
-            {
-                var vitals = await _httpClient.GetFromJsonAsync<List<VitalsModel>>($"api/vitals/patient/{patientId}");
-                return vitals ?? new List<VitalsModel>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"API Get Error: {ex.Message}");
-                return new List<VitalsModel>();
-            }
+            return await _apiService.GetAsync<List<VitalsModel>>
+            (
+                $"api/vitals/patient/{patientId}"
+            ) ?? new List<VitalsModel>();
         }
 
-        // POST: api/vitals
+        // Add a new vitals record
         public async Task<bool> AddVitalsAsync(VitalsModel vitals)
         {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync("api/vitals", vitals);
+            var result = await _apiService.PostAsync<VitalsModel, VitalsModel>
+            (
+                "api/vitals",
+                vitals
+            );
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                // If the backend rejects the save, read the reason from the response
-                var errorReason = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine($"API Create Rejected: {response.StatusCode} - {errorReason}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"API Post Error: {ex.Message}");
-                return false;
-            }
+            return result != null;
         }
 
-        // PUT: api/vitals/{id}
+        // Update an existing vitals record
         public async Task<bool> UpdateVitalsAsync(VitalsModel vitals)
         {
-            try
-            {
-                var response = await _httpClient.PutAsJsonAsync($"api/vitals/{vitals.VitalID}", vitals);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                var errorReason = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine($"API Update Rejected: {response.StatusCode} - {errorReason}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"API Put Error: {ex.Message}");
-                return false;
-            }
+            return await _apiService.PutAsync
+            (
+                $"api/vitals/{vitals.VitalID}",
+                vitals
+            );
         }
 
-        // DELETE: api/vitals/{id}
+        // Delete a vitals record
         public async Task<bool> DeleteVitalsAsync(int vitalId)
         {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"api/vitals/{vitalId}");
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"API Delete Error: {ex.Message}");
-                return false;
-            }
+            return await _apiService.DeleteAsync
+            (
+                $"api/vitals/{vitalId}"
+            );
         }
     }
 }

@@ -22,6 +22,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<VitalsService>();
         builder.Services.AddSingleton<RecordsService>();
+        builder.Services.AddSingleton<ExternalApiService>();
 
 
         // ViewModels
@@ -33,7 +34,6 @@ public static class MauiProgram
         builder.Services.AddTransient<AddRecordViewModel>();
         builder.Services.AddTransient<VitalsViewModel>();
         builder.Services.AddTransient<AddVitalsViewModel>();
-        
 
 
         // Pages
