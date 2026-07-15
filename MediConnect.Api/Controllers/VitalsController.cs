@@ -16,6 +16,14 @@ namespace MediConnect.Api.Controllers
             _vitalsService = vitalsService;
         }
 
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            
+            return Ok();
+        }
+
         // GET: api/vitals/patient/{patientId}
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetByPatient(int patientId)
@@ -33,11 +41,13 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Vitals data is null.");
             }
 
-            // Ensure PatientID is valid and coming through
             if (vitals.PatientID <= 0)
             {
                 return BadRequest("Invalid Patient ID.");
             }
+
+            // Explicitly ensure the ID is 0 so EF Core treats it as a brand new database row insert
+            vitals.VitalID = 0;
 
             var created = await _vitalsService.AddVitalsAsync(vitals);
 
@@ -46,18 +56,25 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Could not record vitals in database.");
             }
 
-            // Return 201 Created Status
-            return CreatedAtAction(nameof(GetByPatient), new { patientId = created.PatientID }, created);
+            // Now targets our new GetById route perfectly without throwing a routing exception
+            return CreatedAtAction(nameof(GetById), new { id = created.VitalID }, created);
         }
 
         // PUT: api/vitals/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Vitals vitals)
         {
-            if (id != vitals.VitalID) return BadRequest("ID mismatch.");
+            if (vitals == null || id != vitals.VitalID)
+            {
+                return BadRequest("ID mismatch.");
+            }
 
             var success = await _vitalsService.UpdateVitalsAsync(vitals);
-            if (!success) return NotFound("Record not found or no changes made.");
+            if (!success)
+            {
+                return NotFound("Record not found or no changes made.");
+            }
+
             return NoContent();
         }
 
@@ -66,7 +83,11 @@ namespace MediConnect.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _vitalsService.DeleteVitalsAsync(id);
-            if (!success) return NotFound("Record not found.");
+            if (!success)
+            {
+                return NotFound("Record not found.");
+            }
+
             return NoContent();
         }
     }

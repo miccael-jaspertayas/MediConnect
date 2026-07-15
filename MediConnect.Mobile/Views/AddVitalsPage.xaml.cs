@@ -6,7 +6,8 @@ namespace MediConnect.Mobile.Views
 {
     public partial class AddVitalsPage : ContentPage
     {
-        public AddVitalsPage(VitalsViewModel vm)
+        // Inject the correct ViewModel here
+        public AddVitalsPage(AddVitalsViewModel vm)
         {
             InitializeComponent();
             BindingContext = vm;

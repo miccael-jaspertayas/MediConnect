@@ -16,7 +16,6 @@
             Spacing="18">
 
             <!-- Header -->
-
             <Grid ColumnDefinitions="Auto,*,Auto">
 
                 <Button
@@ -39,7 +38,6 @@
             </Grid>
 
             <!-- Date -->
-
             <VerticalStackLayout Spacing="6">
 
                 <Label
@@ -76,7 +74,6 @@
             </VerticalStackLayout>
 
             <!-- Temperature -->
-
             <VerticalStackLayout Spacing="6">
 
                 <Label
@@ -97,14 +94,13 @@
                         PlaceholderColor="#A6AFBD"
                         TextColor="#1E2A38"
                         BackgroundColor="Transparent"
-                        Text="{Binding Temperature}"/>
+                        Text="{Binding Temperature, TargetNullValue='', StringFormat='{0}'}"/>
 
                 </Border>
 
             </VerticalStackLayout>
 
             <!-- Blood Pressure -->
-
             <VerticalStackLayout Spacing="6">
 
                 <Label
@@ -129,7 +125,7 @@
                             TextColor="#1E2A38"
                             BackgroundColor="Transparent"
                             HorizontalTextAlignment="Center"
-                            Text="{Binding SystolicBP}"/>
+                            Text="{Binding SystolicBP, TargetNullValue='', StringFormat='{0}'}"/>
 
                     </Border>
 
@@ -155,7 +151,7 @@
                             TextColor="#1E2A38"
                             BackgroundColor="Transparent"
                             HorizontalTextAlignment="Center"
-                            Text="{Binding DiastolicBP}"/>
+                            Text="{Binding DiastolicBP, TargetNullValue='', StringFormat='{0}'}"/>
 
                     </Border>
 
@@ -164,7 +160,6 @@
             </VerticalStackLayout>
 
             <!-- Heart Rate -->
-
             <VerticalStackLayout Spacing="6">
 
                 <Label
@@ -185,14 +180,13 @@
                         PlaceholderColor="#A6AFBD"
                         TextColor="#1E2A38"
                         BackgroundColor="Transparent"
-                        Text="{Binding HeartRate}"/>
+                        Text="{Binding HeartRate, TargetNullValue='', StringFormat='{0}'}"/>
 
                 </Border>
 
             </VerticalStackLayout>
 
             <!-- Weight -->
-
             <VerticalStackLayout Spacing="6">
 
                 <Label
@@ -213,27 +207,27 @@
                         PlaceholderColor="#A6AFBD"
                         TextColor="#1E2A38"
                         BackgroundColor="Transparent"
-                        Text="{Binding Weight}"/>
+                        Text="{Binding Weight, TargetNullValue='', StringFormat='{0}'}"/>
 
                 </Border>
 
             </VerticalStackLayout>
 
-            <!-- Error -->
-
+            <!-- Error Notification Banner -->
             <Label
                 Text="{Binding ErrorMessage}"
-                TextColor="#E5484D"/>
+                TextColor="#E5484D"
+                HorizontalTextAlignment="Center"
+                FontAttributes="Bold"
+                FontSize="14"/>
 
-            <!-- Loading -->
-
+            <!-- Loading Indicator -->
             <ActivityIndicator
                 IsRunning="{Binding IsBusy}"
                 IsVisible="{Binding IsBusy}"
                 Color="#1C6F6F"/>
 
-            <!-- Save -->
-
+            <!-- Save Action Button -->
             <Button
                 Style="{StaticResource PrimaryButtonStyle}"
                 Text="Save Vitals"
@@ -242,5 +236,4 @@
         </VerticalStackLayout>
 
     </ScrollView>
-
 </ContentPage>

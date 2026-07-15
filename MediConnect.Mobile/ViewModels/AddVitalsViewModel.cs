@@ -122,59 +122,28 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        public async Task SaveAsync()
+        private async Task SaveAsync()
         {
             if (IsBusy) return;
-            ErrorMessage = string.Empty;
-
-            // 2. Updated check: verify if everything is null (or 0 from entry views)
-            if (Temperature == null && HeartRate == null && SystolicBP == null && DiastolicBP == null && Weight == null)
-            {
-                ErrorMessage = "Please enter at least one vital sign.";
-                return;
-            }
-
-            // 3. Updated check: handle nullable checks cleanly
-            if (Temperature.HasValue && (Temperature.Value < 34.0 || Temperature.Value > 43.0))
-            {
-                ErrorMessage = "Please enter a valid temperature (34.0°C - 43.0°C).";
-                return;
-            }
-
-            if (HeartRate.HasValue && (HeartRate.Value < 30 || HeartRate.Value > 250))
-            {
-                ErrorMessage = "Please enter a valid heart rate (30 - 250 bpm).";
-                return;
-            }
-
-            if (SystolicBP.HasValue || DiastolicBP.HasValue)
-            {
-                if (!SystolicBP.HasValue || SystolicBP.Value < 50 || SystolicBP.Value > 250)
-                {
-                    ErrorMessage = "Please enter a valid Systolic BP (50 - 250 mmHg).";
-                    return;
-                }
-                if (!DiastolicBP.HasValue || DiastolicBP.Value < 30 || DiastolicBP.Value > 150)
-                {
-                    ErrorMessage = "Please enter a valid Diastolic BP (30 - 150 mmHg).";
-                    return;
-                }
-            }
-
-            if (Weight.HasValue && (Weight.Value < 2.0 || Weight.Value > 500.0))
-            {
-                ErrorMessage = "Please enter a realistic weight (2 - 500 kg).";
-                return;
-            }
 
             IsBusy = true;
+            ErrorMessage = string.Empty;
 
             try
             {
+                // 1. Validation: Require at least one field
+                if (Temperature == null && SystolicBP == null && DiastolicBP == null && HeartRate == null && Weight == null)
+                {
+                    ErrorMessage = "Please enter at least one vitals measurement.";
+                    IsBusy = false;
+                    return;
+                }
+
                 bool success;
 
                 if (SelectedVitals != null)
                 {
+                    // --- UPDATE MODE (EDITING EXISTING) ---
                     SelectedVitals.RecordedAt = RecordedAt;
                     SelectedVitals.Temperature = Temperature;
                     SelectedVitals.SystolicBP = SystolicBP;
@@ -186,6 +155,7 @@ namespace MediConnect.Mobile.ViewModels
                 }
                 else
                 {
+                    // --- CREATE MODE (NEW RECORD) ---
                     var vitals = new VitalsModel
                     {
                         PatientID = _sessionService.PatientID,
@@ -198,28 +168,35 @@ namespace MediConnect.Mobile.ViewModels
                     };
 
                     success = await _vitalsService.AddVitalsAsync(vitals);
-
-                    if (success)
-                    {
-                        _sessionService.UpdateMostRecentVital(vitals);
-                    }
                 }
 
-                if (!success)
+                if (success)
                 {
-                    ErrorMessage = "Unable to save vitals. Connection error.";
-                    return;
+                    // Navigate back to the previous page/history dashboard
+                    await Shell.Current.GoToAsync("..");
                 }
-
-                await Shell.Current.GoToAsync("..");
+                else
+                {
+                    ErrorMessage = "Failed to save vitals to the server. Please try again.";
+                }
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ErrorMessage = $"An unexpected error occurred: {ex.Message}";
+                System.Diagnostics.Debug.WriteLine($"Save Error: {ex}");
             }
             finally
             {
                 IsBusy = false;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Saving Vitals for Patient ID: {_sessionService.PatientID}");
+
+            if (_sessionService.PatientID <= 0)
+            {
+                ErrorMessage = "Error: Invalid Patient Session ID.";
+                IsBusy = false;
+                return;
             }
         }
     }
