@@ -24,7 +24,7 @@ namespace MediConnect.Api.Controllers
             return Ok();
         }
 
-        // GET: api/vitals/patient/{patientId}
+        // GET
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetByPatient(int patientId)
         {
@@ -32,7 +32,7 @@ namespace MediConnect.Api.Controllers
             return Ok(vitals);
         }
 
-        // POST: api/vitals
+        // POST
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Vitals vitals)
         {
@@ -46,7 +46,7 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Invalid Patient ID.");
             }
 
-            // Explicitly ensure the ID is 0 so EF Core treats it as a brand new database row insert
+            
             vitals.VitalID = 0;
 
             var created = await _vitalsService.AddVitalsAsync(vitals);
@@ -56,11 +56,11 @@ namespace MediConnect.Api.Controllers
                 return BadRequest("Could not record vitals in database.");
             }
 
-            // Now targets our new GetById route perfectly without throwing a routing exception
+            
             return CreatedAtAction(nameof(GetById), new { id = created.VitalID }, created);
         }
 
-        // PUT: api/vitals/{id}
+        // PUT
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Vitals vitals)
         {
@@ -78,7 +78,7 @@ namespace MediConnect.Api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/vitals/{id}
+        // DELETE
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

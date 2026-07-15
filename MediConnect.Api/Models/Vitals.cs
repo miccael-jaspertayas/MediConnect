@@ -13,7 +13,7 @@ namespace MediConnect.Api.Models
         [Required]
         public int PatientID { get; set; }
 
-        // Links this data back to Jasper's Patient model
+        // Links this data back Patient model
         [ForeignKey("PatientID")]
         public Patient? Patient { get; set; }
 

@@ -74,12 +74,12 @@ namespace MediConnect.Mobile.ViewModels
 
             try
             {
-                // Call the VitalsService to delete from the database/API
+                
                 bool success = await _vitalsService.DeleteVitalsAsync(vital.VitalID);
 
                 if (success)
                 {
-                    // Remove from the UI list instantly
+                    
                     Vitals.Remove(vital);
                 }
                 else

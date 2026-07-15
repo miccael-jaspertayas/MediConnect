@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MediConnect.Api.Models; // Adjust this to where your backend Vitals model lives
-using MediConnect.Api.Repositories; // Adjust this to your Repository namespace
+using MediConnect.Api.Models; 
+using MediConnect.Api.Repositories;
 
 namespace MediConnect.Api.Services
 {
     public class VitalsService
     {
-        // Assuming you have a Repository pattern set up based on your folder structure
+        
         private readonly IVitalsRepository _vitalsRepository;
 
         public VitalsService(IVitalsRepository vitalsRepository)
