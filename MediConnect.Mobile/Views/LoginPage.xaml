@@ -86,7 +86,7 @@
                         <Entry
                             Grid.Column="1"
                             Placeholder="Password"
-                            IsPassword="True"
+                            IsPassword="{Binding IsPasswordHidden}"
                             Text="{Binding Password}"
                             BackgroundColor="Transparent"
                             TextColor="Black"
@@ -94,8 +94,10 @@
 
                         <Button
                             Grid.Column="2"
-                            Text="👁"
-                            BackgroundColor="Transparent"/>
+                            Text="{Binding IsPasswordHidden, Converter={StaticResource BoolToEyeIconConverter}}"
+                            Command="{Binding TogglePasswordCommand}"
+                            BackgroundColor="Transparent"
+                            FontSize="18"/>
                     </Grid>
 
                 </Border>
@@ -112,7 +114,7 @@
 
             <Button
                 Style="{StaticResource PrimaryButtonStyle}"
-                Text="Mag-login / Log In"
+                Text="Log In"
                 Command="{Binding LoginCommand}" 
                 IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
 
@@ -123,12 +125,12 @@
                 HorizontalOptions="Center">
 
                 <Label
-                    Text="Wala pang account?"
+                    Text="Don't have an account yet?"
                     TextColor="#6F7D8B"
                     HorizontalOptions="Center"/>
 
                 <Label
-                    Text="Mag-register / Register"
+                    Text="Register"
                     FontAttributes="Bold"
                     TextColor="#006D7F"
                     HorizontalOptions="Center">

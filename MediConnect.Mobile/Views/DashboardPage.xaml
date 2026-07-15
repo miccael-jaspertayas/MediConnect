@@ -1,28 +1,131 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
-             x:Class="MediConnect.Mobile.Views.DashboardPage"
-             x:DataType="vm:DashboardViewModel"
-             Title="Home">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="16">
-            <Label Text="{Binding Greeting}" FontSize="22" FontAttributes="Bold" />
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.DashboardPage"
+    x:DataType="vm:DashboardViewModel"
+    Title="Home"
+    BackgroundColor="#F4F6FA">
 
-            <Border Stroke="LightGray" StrokeShape="RoundRectangle 10" Padding="15">
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Latest Vitals" FontAttributes="Bold" />
-                    <Label Text="{Binding LatestVitalsSummary}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20,15" Spacing="18">
+
+            <!-- Greeting -->
+            <Label
+                Text="{Binding Greeting}"
+                FontSize="22"
+                FontAttributes="Bold"
+                TextColor="#1C6F6F"
+                HorizontalOptions="Center"/>
+
+            <!-- Latest Vitals Card -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Latest Vitals" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label
+                        Text="{Binding LatestVitalsSummary}"
+                        FontSize="13"
+                        TextColor="#7A8699"/>
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="View Vitals" Command="{Binding GoToVitalsCommand}" />
-            <Button Text="View Records" Command="{Binding GoToRecordsCommand}" />
-            <Button Text="Symptom Triage" Command="{Binding GoToTriageCommand}" />
-            <Button Text="My Profile" Command="{Binding GoToProfileCommand}" />
+            <!-- Quick Actions -->
+            <Label
+                Text="Quick Actions"
+                FontSize="13"
+                FontAttributes="Bold"
+                TextColor="#7A8699"
+                Margin="4,10,0,0"/>
 
-            <Button Text="Log Out" Command="{Binding LogoutCommand}"
-                    BackgroundColor="Transparent" TextColor="Red" />
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="14" RowSpacing="14">
+
+                <Border Grid.Row="0" Grid.Column="0"
+                        Padding="16"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="Transparent">
+                    <Border.Shadow>
+                        <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToVitalsCommand}"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label Text="🩺" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="Vitals" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1"
+                        Padding="16"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="Transparent">
+                    <Border.Shadow>
+                        <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToRecordsCommand}"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label Text="📋" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="Records" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0"
+                        Padding="16"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="Transparent">
+                    <Border.Shadow>
+                        <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToTriageCommand}"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label Text="⚕" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="Triage" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1"
+                        Padding="16"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="Transparent">
+                    <Border.Shadow>
+                        <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToProfileCommand}"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label Text="👤" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="Profile" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Log Out -->
+            <Button
+                Style="{StaticResource DangerButtonStyle}"
+                Text="Log Out"
+                Command="{Binding LogoutCommand}"
+                Margin="0,10,0,0"/>
+
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>
