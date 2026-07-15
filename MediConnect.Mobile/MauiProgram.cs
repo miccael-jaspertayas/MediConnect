@@ -1,6 +1,7 @@
 ﻿using MediConnect.Mobile.Services;
 using MediConnect.Mobile.ViewModels;
 using MediConnect.Mobile.Views;
+using Microsoft.Extensions.Logging;
 
 namespace MediConnect.Mobile;
 
@@ -40,10 +41,9 @@ public static class MauiProgram
         builder.Services.AddTransient<AddRecordPage>();
 
 #if DEBUG
-            builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }
