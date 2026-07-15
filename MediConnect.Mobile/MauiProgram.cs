@@ -39,6 +39,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<RecordsPage>();
         builder.Services.AddTransient<AddRecordPage>();
+        builder.Services.AddTransient<TriagePage>();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -47,3 +48,5 @@ public static class MauiProgram
         return builder.Build();
     }
 }
+
+
