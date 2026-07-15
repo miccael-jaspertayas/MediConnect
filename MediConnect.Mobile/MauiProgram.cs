@@ -22,11 +22,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<VitalsService>();
         builder.Services.AddSingleton<RecordsService>();
-        builder.Services.AddSingleton(sp => new HttpClient
-        {
-
-            BaseAddress = new Uri("http://10.0.2.2/")
-        });
 
 
         // ViewModels

@@ -17,5 +17,10 @@ namespace MediConnect.Mobile.Views
             base.OnAppearing();
             await _vm.LoadAsync();
         }
+
+        private async void BackButton_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }

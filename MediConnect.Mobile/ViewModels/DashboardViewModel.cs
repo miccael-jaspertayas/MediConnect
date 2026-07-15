@@ -33,7 +33,7 @@ namespace MediConnect.Mobile.ViewModels
             GoToVitalsCommand = new Command(async () => await Shell.Current.GoToAsync("//Vitals"));
             GoToRecordsCommand = new Command(async () => await Shell.Current.GoToAsync("//Records"));
             GoToTriageCommand = new Command(async () => await Shell.Current.GoToAsync("//Triage"));
-            GoToProfileCommand = new Command(async () => await Shell.Current.GoToAsync("Profile"));
+            GoToProfileCommand = new Command(async () => await Shell.Current.GoToAsync("ProfilePage"));
             LogoutCommand = new Command(Logout);
 
             // Subscribe to real-time additions of new vitals

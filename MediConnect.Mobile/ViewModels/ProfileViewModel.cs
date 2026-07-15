@@ -1,4 +1,5 @@
 ﻿using MediConnect.Mobile.Dtos;
+using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
 using MediConnect.Mobile.ViewModels;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ namespace MediConnect.Mobile.ViewModels
     public class ProfileViewModel : BaseViewModel
     {
         private readonly ApiService _api;
+        private readonly ExternalApiService _externalApi;
         private readonly SessionService _session;
 
         private int _patientId;
@@ -38,19 +40,35 @@ namespace MediConnect.Mobile.ViewModels
         public string StatusMessage { get => _statusMessage; set => SetProperty(ref _statusMessage, value); }
 
         // Medication lookup result
-        private string _medicationLookupResult = string.Empty;
-        public string MedicationLookupResult { get => _medicationLookupResult; set => SetProperty(ref _medicationLookupResult, value); }
+        private MedicationLookupResult? _lookupResult;
+        public MedicationLookupResult? LookupResult
+        {
+            get => _lookupResult;
+            set => SetProperty(ref _lookupResult, value);
+        }
+        private string _lookupStatusMessage = string.Empty;
+        public string LookupStatusMessage { get => _lookupStatusMessage; set => SetProperty(ref _lookupStatusMessage, value); }
+
+        private bool _isSaveSuccess;
+        public bool IsSaveSuccess
+        {
+            get => _isSaveSuccess;
+            set => SetProperty(ref _isSaveSuccess, value);
+        }
 
         public ICommand LoadCommand { get; }
         public ICommand SaveCommand { get; }
+        public ICommand LookupMedicationCommand { get; }
 
-        public ProfileViewModel(ApiService api, SessionService session)
+        public ProfileViewModel(ApiService api, SessionService session, ExternalApiService externalApi)
         {
             _api = api;
             _session = session;
+            _externalApi = externalApi;
 
             LoadCommand = new Command(async () => await LoadAsync());
             SaveCommand = new Command(async () => await SaveAsync());
+            LookupMedicationCommand = new Command(async () => await LookupMedicationAsync());
         }
 
         public async Task LoadAsync()
@@ -86,6 +104,7 @@ namespace MediConnect.Mobile.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Name))
             {
+                IsSaveSuccess = false;
                 StatusMessage = "Name is required.";
                 return false;
             }
@@ -93,6 +112,7 @@ namespace MediConnect.Mobile.ViewModels
             if (!string.IsNullOrWhiteSpace(EmergencyContactPhone) &&
                 !Regex.IsMatch(EmergencyContactPhone, @"^[0-9+\-\s()]{7,20}$"))
             {
+                IsSaveSuccess = false;
                 StatusMessage = "Emergency contact phone looks invalid.";
                 return false;
             }
@@ -105,7 +125,11 @@ namespace MediConnect.Mobile.ViewModels
             if (IsBusy) return;
             StatusMessage = string.Empty;
 
-            if (!Validate()) return;
+            if (!Validate())
+            {
+                IsSaveSuccess = false;
+                return;
+            }
 
             IsBusy = true;
             try
@@ -123,7 +147,32 @@ namespace MediConnect.Mobile.ViewModels
                 };
 
                 var success = await _api.PutAsync($"api/patients/{_patientId}", dto);
+
+                IsSaveSuccess = success;
                 StatusMessage = success ? "Profile saved." : "Failed to save profile.";
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task LookupMedicationAsync()
+        {
+            if (IsBusy) return;
+            if (string.IsNullOrWhiteSpace(Medications))
+            {
+                LookupStatusMessage = "Enter a medication name first.";
+                LookupResult = null;
+                return;
+            }
+
+            IsBusy = true;
+            try
+            {
+                var result = await _externalApi.LookupMedicationAsync(Medications);
+                LookupResult = result;
+                LookupStatusMessage = result.Found ? string.Empty : "No info found.";
             }
             finally
             {
