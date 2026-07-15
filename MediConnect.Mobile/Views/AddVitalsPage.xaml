@@ -1,32 +1,246 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MediConnect.Mobile.Views.AddVitalsPage"
-             Title="Record Patient Vitals">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.AddVitalsPage"
+    x:DataType="vm:AddVitalsViewModel"
+    Title="Add Vitals"
+    BackgroundColor="#F4F6FA"
+    NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
 
-            <Label Text="Enter Vitals Metrics" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <VerticalStackLayout
+            Padding="20,15"
+            Spacing="18">
 
-            <Label Text="Temperature (°C)" FontAttributes="Bold"/>
-            <Entry x:Name="TempEntry" Placeholder="e.g. 36.5" Keyboard="Numeric"/>
+            <!-- Header -->
 
-            <Label Text="Blood Pressure (mmHg)" FontAttributes="Bold"/>
-            <HorizontalStackLayout Spacing="10">
-                <Entry x:Name="SystolicEntry" Placeholder="Systolic (e.g. 120)" Keyboard="Numeric" WidthRequest="150"/>
-                <Label Text="/" VerticalOptions="Center" FontSize="20"/>
-                <Entry x:Name="DiastolicEntry" Placeholder="Diastolic (e.g. 80)" Keyboard="Numeric" WidthRequest="150"/>
-            </HorizontalStackLayout>
+            <Grid ColumnDefinitions="Auto,*,Auto">
 
-            <Label Text="Heart Rate (bpm)" FontAttributes="Bold"/>
-            <Entry x:Name="HeartRateEntry" Placeholder="e.g. 72" Keyboard="Numeric"/>
+                <Button
+                    Grid.Column="0"
+                    Text="←"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="#1E2A38"
+                    WidthRequest="40"
+                    Clicked="BackButton_Clicked"/>
 
-            <Label Text="Weight (kg)" FontAttributes="Bold"/>
-            <Entry x:Name="WeightEntry" Placeholder="e.g. 65.0" Keyboard="Numeric"/>
+                <Label
+                    Grid.Column="1"
+                    Text="Add Vitals"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    TextColor="#1E2A38"/>
 
-            <Button x:Name="SaveButton" Text="Save Vitals" Clicked="OnSaveVitalsClicked" Margin="0,20,0,0" BackgroundColor="#2196F3" TextColor="White"/>
+            </Grid>
+
+            <!-- Date -->
+
+            <VerticalStackLayout Spacing="6">
+
+                <Label
+                    Text="Date Recorded"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#1E2A38"/>
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White">
+
+                    <Grid
+                        Padding="12,2"
+                        ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Text="📅"
+                            Margin="0,0,8,0"
+                            VerticalOptions="Center"
+                            TextColor="#1E2A38"/>
+
+                        <DatePicker
+                            Grid.Column="1"
+                            Date="{Binding RecordedAt}"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"/>
+
+                    </Grid>
+
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!-- Temperature -->
+
+            <VerticalStackLayout Spacing="6">
+
+                <Label
+                    Text="Body Temperature (°C)"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#1E2A38"/>
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White">
+
+                    <Entry
+                        Margin="12,4"
+                        Keyboard="Numeric"
+                        Placeholder="36.8"
+                        PlaceholderColor="#A6AFBD"
+                        TextColor="#1E2A38"
+                        BackgroundColor="Transparent"
+                        Text="{Binding Temperature}"/>
+
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!-- Blood Pressure -->
+
+            <VerticalStackLayout Spacing="6">
+
+                <Label
+                    Text="Blood Pressure (mmHg)"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#1E2A38"/>
+
+                <Grid ColumnDefinitions="*,Auto,*">
+
+                    <Border
+                        Grid.Column="0"
+                        Stroke="#D8DEE8"
+                        StrokeShape="RoundRectangle 12"
+                        BackgroundColor="White">
+
+                        <Entry
+                            Margin="12,4"
+                            Keyboard="Numeric"
+                            Placeholder="120"
+                            PlaceholderColor="#A6AFBD"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding SystolicBP}"/>
+
+                    </Border>
+
+                    <Label
+                        Grid.Column="1"
+                        Text="/"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontSize="22"
+                        TextColor="#1E2A38"/>
+
+                    <Border
+                        Grid.Column="2"
+                        Stroke="#D8DEE8"
+                        StrokeShape="RoundRectangle 12"
+                        BackgroundColor="White">
+
+                        <Entry
+                            Margin="12,4"
+                            Keyboard="Numeric"
+                            Placeholder="80"
+                            PlaceholderColor="#A6AFBD"
+                            TextColor="#1E2A38"
+                            BackgroundColor="Transparent"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding DiastolicBP}"/>
+
+                    </Border>
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+            <!-- Heart Rate -->
+
+            <VerticalStackLayout Spacing="6">
+
+                <Label
+                    Text="Heart Rate (bpm)"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#1E2A38"/>
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White">
+
+                    <Entry
+                        Margin="12,4"
+                        Keyboard="Numeric"
+                        Placeholder="72"
+                        PlaceholderColor="#A6AFBD"
+                        TextColor="#1E2A38"
+                        BackgroundColor="Transparent"
+                        Text="{Binding HeartRate}"/>
+
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!-- Weight -->
+
+            <VerticalStackLayout Spacing="6">
+
+                <Label
+                    Text="Weight (kg)"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#1E2A38"/>
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White">
+
+                    <Entry
+                        Margin="12,4"
+                        Keyboard="Numeric"
+                        Placeholder="65"
+                        PlaceholderColor="#A6AFBD"
+                        TextColor="#1E2A38"
+                        BackgroundColor="Transparent"
+                        Text="{Binding Weight}"/>
+
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!-- Error -->
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                TextColor="#E5484D"/>
+
+            <!-- Loading -->
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="#1C6F6F"/>
+
+            <!-- Save -->
+
+            <Button
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="Save Vitals"
+                Command="{Binding SaveCommand}"/>
 
         </VerticalStackLayout>
+
     </ScrollView>
+
 </ContentPage>
