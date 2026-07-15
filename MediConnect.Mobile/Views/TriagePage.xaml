@@ -1,22 +1,106 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MediConnect.Mobile.Views.TriagePage"
-             Title="Symptom Triage">
+             Title="Symptom Triage"
+             BackgroundColor="#F5F7F8">
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+        <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Entry x:Name="SymptomSearchEntry"
-                   Placeholder="Type a symptom..." />
+            <Label Text="Symptom Triage"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#1F7A70" />
 
-            <CollectionView x:Name="SuggestionsList"
-                             HeightRequest="150" />
+            <Label Text="Search and select what you're feeling. We'll suggest where to go."
+                   FontSize="14"
+                   TextColor="#6B7280" />
 
-            <Label Text="Selected Symptoms:" FontAttributes="Bold" />
-            <CollectionView x:Name="SelectedSymptomsList"
-                             HeightRequest="120" />
+            <!-- Search box -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="#E2E8ED"
+                    BackgroundColor="White"
+                    Padding="12,8">
+                <Entry Placeholder="Type a symptom..."
+                       Text="{Binding SearchText}"
+                       PlaceholderColor="#9CA3AF"
+                       BackgroundColor="Transparent" />
+            </Border>
 
-            <Button x:Name="CheckSymptomsButton"
-                    Text="Check Symptoms" />
+            <!-- Suggestions -->
+            <CollectionView ItemsSource="{Binding Suggestions}"
+                             HeightRequest="160">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E2E8ED"
+                                BackgroundColor="White"
+                                Padding="12,10"
+                                Margin="0,3">
+                            <Label Text="{Binding .}" TextColor="#111827">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectSymptomCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Selected symptoms -->
+            <Label Text="Selected Symptoms" FontAttributes="Bold" TextColor="#111827" FontSize="16" />
+
+            <CollectionView ItemsSource="{Binding SelectedSymptoms}"
+                             HeightRequest="120">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 20"
+                                BackgroundColor="#E6F4F2"
+                                Padding="14,8"
+                                Margin="0,3">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding .}" TextColor="#1F7A70" VerticalOptions="Center" />
+                                <Label Text="✕" TextColor="#1F7A70" FontAttributes="Bold" VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveSymptomCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Check button -->
+            <Border StrokeShape="RoundRectangle 24"
+                    BackgroundColor="#1F7A70"
+                    Padding="0,14">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CheckSymptomsCommand}" />
+                </Border.GestureRecognizers>
+                <Label Text="Check Symptoms"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                IsVisible="{Binding IsLoading}"
+                                Color="#1F7A70" />
+
+            <!-- Result -->
+            <Border BackgroundColor="{Binding ResultColor}"
+                    Padding="16"
+                    StrokeShape="RoundRectangle 14">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="{Binding ResultTier}" FontAttributes="Bold" TextColor="White" FontSize="18" />
+                    <Label Text="{Binding ResultExplanation}" TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
 
         </VerticalStackLayout>
     </ScrollView>

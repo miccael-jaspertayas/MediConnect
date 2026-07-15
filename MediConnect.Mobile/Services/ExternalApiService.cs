@@ -1,7 +1,7 @@
-﻿using System.Net.Http.Json;
-using System.Web;
-using MediConnect.Mobile.Dtos;
+﻿using MediConnect.Mobile.Dtos;
 using MediConnect.Mobile.Models;
+using System.Net.Http.Json;
+using System.Web;
 
 namespace MediConnect.Mobile.Services
 {
@@ -74,21 +74,30 @@ namespace MediConnect.Mobile.Services
         {
             try
             {
-                var url = $"https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?terms={Uri.EscapeDataString(query)}";
+                var url = $"https://clinicaltables.nlm.nih.gov/api/conditions/v3/search?terms={Uri.EscapeDataString(query)}";
                 var raw = await _http.GetStringAsync(url);
                 var parsed = System.Text.Json.JsonDocument.Parse(raw);
+                var rootArray = parsed.RootElement.EnumerateArray().ToList();
+
                 var names = new List<string>();
 
-                var displayArray = parsed.RootElement[3];
-                foreach (var item in displayArray.EnumerateArray())
+                if (rootArray.Count > 3 && rootArray[3].ValueKind == System.Text.Json.JsonValueKind.Array)
                 {
-                    names.Add(item[0].GetString() ?? "");
+                    foreach (var item in rootArray[3].EnumerateArray())
+                    {
+                        // Default df=consumer_name returns each item as a single-element array, e.g. ["Fever"]
+                        var inner = item.EnumerateArray().ToList();
+                        if (inner.Count > 0 && !string.IsNullOrWhiteSpace(inner[0].GetString()))
+                            names.Add(inner[0].GetString()!);
+                    }
                 }
 
-                return names;
+                System.Diagnostics.Debug.WriteLine($"[Triage] NIH returned {names.Count} results for '{query}'");
+                return names.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[Triage] NIH call failed: {ex.Message} — using fallback");
                 return GetFallbackSymptoms(query);
             }
         }
