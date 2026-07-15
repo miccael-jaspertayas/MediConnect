@@ -7,7 +7,6 @@ using MediConnect.Mobile.Services;
 
 namespace MediConnect.Mobile.ViewModels
 {
-    // Receive the VitalID query parameter passed during navigation
     [QueryProperty(nameof(VitalId), "Id")]
     public class AddVitalsViewModel : BaseViewModel
     {
@@ -28,13 +27,10 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        public AddVitalsViewModel(
-            VitalsService vitalsService,
-            SessionService sessionService)
+        public AddVitalsViewModel(VitalsService vitalsService, SessionService sessionService)
         {
             _vitalsService = vitalsService;
             _sessionService = sessionService;
-
             SaveCommand = new Command(async () => await SaveAsync());
         }
 
@@ -54,36 +50,37 @@ namespace MediConnect.Mobile.ViewModels
             set => SetProperty(ref _recordedAt, value);
         }
 
-        private double _temperature;
-        public double Temperature
+        // 1. Change properties to Nullable types to prevent 0 value collision
+        private double? _temperature;
+        public double? Temperature
         {
             get => _temperature;
             set => SetProperty(ref _temperature, value);
         }
 
-        private int _systolicBP;
-        public int SystolicBP
+        private int? _systolicBP;
+        public int? SystolicBP
         {
             get => _systolicBP;
             set => SetProperty(ref _systolicBP, value);
         }
 
-        private int _diastolicBP;
-        public int DiastolicBP
+        private int? _diastolicBP;
+        public int? DiastolicBP
         {
             get => _diastolicBP;
             set => SetProperty(ref _diastolicBP, value);
         }
 
-        private int _heartRate;
-        public int HeartRate
+        private int? _heartRate;
+        public int? HeartRate
         {
             get => _heartRate;
             set => SetProperty(ref _heartRate, value);
         }
 
-        private double _weight;
-        public double Weight
+        private double? _weight;
+        public double? Weight
         {
             get => _weight;
             set => SetProperty(ref _weight, value);
@@ -96,13 +93,11 @@ namespace MediConnect.Mobile.ViewModels
             set => SetProperty(ref _errorMessage, value);
         }
 
-        // Loads existing vitals when a VitalID query parameter is passed
         public async Task LoadVitalsAsync(int vitalId)
         {
             IsBusy = true;
             try
             {
-                // We fetch all records and filter by ID, or if you have an API route: api/vitals/{id}
                 var list = await _vitalsService.GetVitalsAsync(_sessionService.PatientID);
                 var vital = list.Find(v => v.VitalID == vitalId);
 
@@ -129,49 +124,44 @@ namespace MediConnect.Mobile.ViewModels
 
         public async Task SaveAsync()
         {
-            if (IsBusy)
-                return;
-
+            if (IsBusy) return;
             ErrorMessage = string.Empty;
 
-            // 1. Check if at least some data was entered
-            if (Temperature == 0 && HeartRate == 0 && SystolicBP == 0 && DiastolicBP == 0 && Weight == 0)
+            // 2. Updated check: verify if everything is null (or 0 from entry views)
+            if (Temperature == null && HeartRate == null && SystolicBP == null && DiastolicBP == null && Weight == null)
             {
                 ErrorMessage = "Please enter at least one vital sign.";
                 return;
             }
 
-            // 2. Validate Temperature (if entered, must be between 34.0°C and 43.0°C)
-            if (Temperature != 0 && (Temperature < 34.0 || Temperature > 43.0))
+            // 3. Updated check: handle nullable checks cleanly
+            if (Temperature.HasValue && (Temperature.Value < 34.0 || Temperature.Value > 43.0))
             {
                 ErrorMessage = "Please enter a valid temperature (34.0°C - 43.0°C).";
                 return;
             }
 
-            // 3. Validate Heart Rate (if entered, must be between 30 and 250 bpm)
-            if (HeartRate != 0 && (HeartRate < 30 || HeartRate > 250))
+            if (HeartRate.HasValue && (HeartRate.Value < 30 || HeartRate.Value > 250))
             {
                 ErrorMessage = "Please enter a valid heart rate (30 - 250 bpm).";
                 return;
             }
 
-            // 4. Validate Blood Pressure (if either is entered, validate both ranges)
-            if (SystolicBP != 0 || DiastolicBP != 0)
+            if (SystolicBP.HasValue || DiastolicBP.HasValue)
             {
-                if (SystolicBP < 50 || SystolicBP > 250)
+                if (!SystolicBP.HasValue || SystolicBP.Value < 50 || SystolicBP.Value > 250)
                 {
                     ErrorMessage = "Please enter a valid Systolic BP (50 - 250 mmHg).";
                     return;
                 }
-                if (DiastolicBP < 30 || DiastolicBP > 150)
+                if (!DiastolicBP.HasValue || DiastolicBP.Value < 30 || DiastolicBP.Value > 150)
                 {
                     ErrorMessage = "Please enter a valid Diastolic BP (30 - 150 mmHg).";
                     return;
                 }
             }
 
-            // 5. Validate Weight (if entered, must be a realistic positive number)
-            if (Weight != 0 && (Weight < 2.0 || Weight > 500.0))
+            if (Weight.HasValue && (Weight.Value < 2.0 || Weight.Value > 500.0))
             {
                 ErrorMessage = "Please enter a realistic weight (2 - 500 kg).";
                 return;
@@ -185,7 +175,6 @@ namespace MediConnect.Mobile.ViewModels
 
                 if (SelectedVitals != null)
                 {
-                    // Update mode
                     SelectedVitals.RecordedAt = RecordedAt;
                     SelectedVitals.Temperature = Temperature;
                     SelectedVitals.SystolicBP = SystolicBP;
@@ -197,7 +186,6 @@ namespace MediConnect.Mobile.ViewModels
                 }
                 else
                 {
-                    // Create mode
                     var vitals = new VitalsModel
                     {
                         PatientID = _sessionService.PatientID,

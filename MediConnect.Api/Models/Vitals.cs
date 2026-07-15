@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,19 +20,15 @@ namespace MediConnect.Api.Models
         [Required]
         public DateTime RecordedAt { get; set; }
 
-        [Required]
-        public double Temperature { get; set; }
+        
+        public double? Temperature { get; set; }
 
-        [Required]
-        public int SystolicBP { get; set; }
+        public int? SystolicBP { get; set; }
 
-        [Required]
-        public int DiastolicBP { get; set; }
+        public int? DiastolicBP { get; set; }
 
-        [Required]
-        public int HeartRate { get; set; }
+        public int? HeartRate { get; set; }
 
-        [Required]
-        public double Weight { get; set; }
+        public double? Weight { get; set; }
     }
 }

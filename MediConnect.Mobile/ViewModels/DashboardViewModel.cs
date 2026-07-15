@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Input;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
+﻿using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
+using Microsoft.Maui.Controls;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MediConnect.Mobile.ViewModels
 {
@@ -68,9 +69,13 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private void HandleVitalsUpdated(Models.VitalsModel vital)
+        private void HandleVitalsUpdated(VitalsModel updatedVitals)
         {
-            LatestVitalsSummary = $"Latest Vitals ({vital.RecordedAt:MM/dd}): Temp: {vital.Temperature}°C, HR: {vital.HeartRate} bpm, BP: {vital.SystolicBP}/{vital.DiastolicBP}";
+            
+            if (updatedVitals != null)
+            {
+                
+            }
         }
 
         private void Logout()
