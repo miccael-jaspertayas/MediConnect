@@ -44,12 +44,6 @@ public static class MauiProgram
         builder.Services.AddTransient<AddRecordPage>();
         builder.Services.AddTransient<VitalsPage>();
         builder.Services.AddTransient<AddVitalsPage>();
-
-        return builder.Build();
-    }
-}
-    
-    
         builder.Services.AddTransient<TriagePage>();
 
 #if DEBUG
