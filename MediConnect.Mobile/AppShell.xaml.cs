@@ -11,6 +11,7 @@ namespace MediConnect.Mobile
             Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
             Routing.RegisterRoute(nameof(AddRecordPage), typeof(AddRecordPage));
             Routing.RegisterRoute(nameof(AddVitalsPage), typeof(AddVitalsPage));
+           
         }
     }
 }

@@ -4,6 +4,7 @@ using MediConnect.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediConnect.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260715083701_MakeVitalsNullable")]
+    partial class MakeVitalsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,13 +153,13 @@ namespace MediConnect.Api.Migrations
                     b.Property<DateTime>("RecordedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<double?>("SpO2")
-                        .HasColumnType("double");
-
                     b.Property<int?>("SystolicBP")
                         .HasColumnType("int");
 
                     b.Property<double?>("Temperature")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("Weight")
                         .HasColumnType("double");
 
                     b.HasKey("VitalID");

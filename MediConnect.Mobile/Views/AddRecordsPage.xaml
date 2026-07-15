@@ -5,7 +5,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.AddRecordPage"
     x:DataType="vm:AddRecordViewModel"
-    Title="Add Record"
+    Title=""
     BackgroundColor="#F4F6FA"
     NavigationPage.HasNavigationBar="False">
 

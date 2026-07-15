@@ -209,6 +209,9 @@ namespace MediConnect.Mobile.ViewModels
             if (SelectedRecord == null)
                 return;
 
+            bool confirm = await Shell.Current.DisplayAlertAsync("Delete", "Are you sure you want to delete this record?", "Yes", "No");
+            if (!confirm) return;
+
             IsBusy = true;
 
             try
