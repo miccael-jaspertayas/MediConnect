@@ -106,15 +106,15 @@
                     Text="{Binding ErrorMessage}"
                     TextColor="#E5484D"
                     HorizontalOptions="Center"
-                    IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}" />
 
                 <!-- Login -->
 
-            <Button
-                Style="{StaticResource PrimaryButtonStyle}"
-                Text="Mag-login / Log In"
-                Command="{Binding LoginCommand}" 
-                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                <Button
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="Mag-login / Log In"
+                    Command="{Binding LoginCommand}" 
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
 
             </VerticalStackLayout>
 
