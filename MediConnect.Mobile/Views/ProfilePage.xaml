@@ -1,40 +1,268 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
-             x:Class="MediConnect.Mobile.Views.ProfilePage"
-             x:DataType="vm:ProfileViewModel"
-             Title="My Profile">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.ProfilePage"
+    x:DataType="vm:ProfileViewModel"
+    Title="My Profile"
+    BackgroundColor="#F4F6FA">
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
+        <VerticalStackLayout Padding="20,15" Spacing="18">
 
-            <Label Text="Name" FontAttributes="Bold" />
-            <Entry Text="{Binding Name}" Placeholder="Full name" />
+            <!-- Header -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button
+                    Grid.Column="0"
+                    Text="←"
+                    FontSize="20"
+                    TextColor="#1E2A38"
+                    BackgroundColor="Transparent"
+                    Clicked="BackButton_Clicked"
+                    WidthRequest="40"/>
 
-            <Label Text="Date of Birth" FontAttributes="Bold" />
-            <DatePicker Date="{Binding Dob}" />
+                <Label
+                    Grid.Column="1"
+                    Text="My Profile"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    TextColor="#1C6F6F"
+                    HorizontalOptions="Center"/>
+            </Grid>
 
-            <Label Text="Blood Type" FontAttributes="Bold" />
-            <Entry Text="{Binding BloodType}" Placeholder="e.g. O+" />
+            <!-- Personal Info Card -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
 
-            <Label Text="Allergies" FontAttributes="Bold" />
-            <Editor Text="{Binding Allergies}" AutoSize="TextChanges" />
+                <VerticalStackLayout Spacing="14">
 
-            <Label Text="Medications" FontAttributes="Bold" />
-            <Editor Text="{Binding Medications}" AutoSize="TextChanges" />
-            
-            <!-- "Look up medication" OpenFDA button goes here -->
-            <Label Text="{Binding MedicationLookupResult}" FontAttributes="Italic" />
+                    <Label Text="Personal Information" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
 
-            <Label Text="Emergency Contact Name" FontAttributes="Bold" />
-            <Entry Text="{Binding EmergencyContactName}" />
+                    <!-- Name -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Full Name" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Entry
+                                Placeholder="Full name"
+                                Text="{Binding Name}"
+                                Margin="14,0"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+                    </VerticalStackLayout>
 
-            <Label Text="Emergency Contact Phone" FontAttributes="Bold" />
-            <Entry Text="{Binding EmergencyContactPhone}" Keyboard="Telephone" />
+                    <!-- DOB -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Date of Birth" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <DatePicker Date="{Binding Dob}" Margin="14,0" TextColor="Black"/>
+                        </Border>
+                    </VerticalStackLayout>
 
-            <Label Text="{Binding StatusMessage}" TextColor="DarkRed" />
+                    <!-- Blood Type -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Blood Type" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Entry
+                                Placeholder="e.g. O+"
+                                Text="{Binding BloodType}"
+                                Margin="14,0"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+                    </VerticalStackLayout>
 
-            <Button Text="Save" Command="{Binding SaveCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Medical Info Card -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Medical Information" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+
+                    <!-- Allergies -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Allergies" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Editor
+                                Text="{Binding Allergies}"
+                                AutoSize="TextChanges"
+                                Margin="14,10"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Medications -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Medications" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Editor
+                                Text="{Binding Medications}"
+                                AutoSize="TextChanges"
+                                Margin="14,10"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+
+                        <Button
+                            Text="Look up medication"
+                            Command="{Binding LookupMedicationCommand}"
+                            BackgroundColor="#E3F1F0"
+                            TextColor="#1C6F6F"
+                            FontAttributes="Bold"
+                            FontSize="13"
+                            CornerRadius="14"
+                            HeightRequest="40"/>
+
+                        <Label
+                            Text="{Binding LookupStatusMessage}"
+                            FontSize="12"
+                            TextColor="#E5484D"
+                            IsVisible="{Binding LookupStatusMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Medication lookup result -->
+                    <Border
+                        IsVisible="{Binding LookupResult.Found}"
+                        Padding="14"
+                        BackgroundColor="#F4F6FA"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#E4E9F0">
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding LookupResult.BrandName}" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+                            <Label Text="{Binding LookupResult.GenericName, StringFormat='Generic: {0}'}" FontSize="12" TextColor="#7A8699"/>
+                            <Label Text="{Binding LookupResult.Manufacturer, StringFormat='Manufacturer: {0}'}" FontSize="12" TextColor="#7A8699"/>
+                            <Label Text="{Binding LookupResult.Route, StringFormat='Route: {0}'}" FontSize="12" TextColor="#7A8699"/>
+
+                            <!-- Usage -->
+                            <Label Text="Usage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"/>
+                            <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding LookupResult.UsageLines}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Grid ColumnDefinitions="16,*">
+                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
+                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+
+                            <!-- Dosage -->
+                            <Label Text="Dosage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"
+                                    IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}"/>
+                            <VerticalStackLayout Spacing="4"
+                              BindableLayout.ItemsSource="{Binding LookupResult.DosageLines}"
+                              IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Grid ColumnDefinitions="16,*">
+                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
+                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+
+                            <!-- Warnings -->
+                            <Label Text="Warnings" FontSize="12" FontAttributes="Bold" TextColor="#E5484D" Margin="0,6,0,0"
+                                    IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}"/>
+                            <VerticalStackLayout Spacing="4"
+                              BindableLayout.ItemsSource="{Binding LookupResult.WarningsLines}"
+                              IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Grid ColumnDefinitions="16,*">
+                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#E5484D" VerticalOptions="Start"/>
+                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#E5484D" LineBreakMode="WordWrap"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Emergency Contact Card -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Emergency Contact" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Contact Name" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Entry
+                                Text="{Binding EmergencyContactName}"
+                                Margin="14,0"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Contact Phone" FontSize="12" TextColor="#7A8699"/>
+                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                            <Entry
+                                Text="{Binding EmergencyContactPhone}"
+                                Keyboard="Telephone"
+                                Margin="14,0"
+                                BackgroundColor="Transparent"
+                                TextColor="Black"
+                                PlaceholderColor="#A6AFBD"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Save status + button -->
+            <Label
+                Text="{Binding StatusMessage}"
+                TextColor="{Binding IsSaveSuccess, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#1C6F6F|#E5484D'}"
+                HorizontalOptions="Center"
+                IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+            <Button
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="Save Profile"
+                Command="{Binding SaveCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"/>
+
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>
