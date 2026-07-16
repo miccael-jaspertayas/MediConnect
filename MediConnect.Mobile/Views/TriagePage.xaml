@@ -24,6 +24,7 @@
                 <Entry Placeholder="Type a symptom..."
                        Text="{Binding SearchText}"
                        PlaceholderColor="#9CA3AF"
+                       TextColor="Black"
                        BackgroundColor="Transparent" />
             </Border>
 

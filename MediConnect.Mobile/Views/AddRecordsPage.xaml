@@ -34,7 +34,7 @@
             <!-- Field: Date -->
             <VerticalStackLayout Spacing="6">
                 <HorizontalStackLayout Spacing="4">
-                    <Label Text="Date of Visit (Petsa ng Pagbisita)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="Date of Visit" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
                     <Label Text="*" TextColor="#E5484D" FontAttributes="Bold"/>
                 </HorizontalStackLayout>
                 <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
@@ -64,15 +64,14 @@
             <!-- Field: Doctor -->
             <VerticalStackLayout Spacing="6">
                 <HorizontalStackLayout Spacing="4">
-                    <Label Text="Doctor Name (Pangalan ng Doktor)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
-                    <Label Text="(Optional)" FontSize="12" TextColor="#A6AFBD"/>
+                    <Label Text="Doctor Name" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
                 </HorizontalStackLayout>
                 <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White">
                     <Grid ColumnDefinitions="Auto,*" Padding="12,2">
                         <Label Grid.Column="0" Text="👤" FontSize="14" VerticalOptions="Center" Margin="0,0,8,0"/>
                         <Entry
                             Grid.Column="1"
-                            Placeholder="e.g., Dr. House"
+                            Placeholder="e.g., Dr. Kwak Kwak"
                             Text="{Binding DoctorName}"
                             TextColor="#1E2A38"
                             BackgroundColor="Transparent"/>
@@ -102,7 +101,7 @@
             <!-- Field: Notes -->
             <VerticalStackLayout Spacing="6">
                 <HorizontalStackLayout Spacing="4">
-                    <Label Text="Personal Notes (Mga Tala)" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
+                    <Label Text="Personal Notes" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38"/>
                     <Label Text="(Optional)" FontSize="12" TextColor="#A6AFBD"/>
                 </HorizontalStackLayout>
                 <Border StrokeShape="RoundRectangle 12" Stroke="#D8DEE8" BackgroundColor="White" Padding="12,10">
