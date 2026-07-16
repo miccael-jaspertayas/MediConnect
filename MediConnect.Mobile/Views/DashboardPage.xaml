@@ -143,7 +143,7 @@
                         <TapGestureRecognizer Command="{Binding GoToVitalsCommand}"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
-                        <Label Text="🩺" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="🩸" FontSize="24" HorizontalOptions="Center"/>
                         <Label Text="Vitals" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
@@ -177,7 +177,7 @@
                         <TapGestureRecognizer Command="{Binding GoToTriageCommand}"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
-                        <Label Text="⚕" FontSize="24" HorizontalOptions="Center"/>
+                        <Label Text="🩺" FontSize="24" HorizontalOptions="Center"/>
                         <Label Text="Triage" FontSize="13" FontAttributes="Bold" TextColor="#1E2A38" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>

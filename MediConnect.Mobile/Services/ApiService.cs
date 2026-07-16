@@ -8,7 +8,11 @@ namespace MediConnect.Mobile.Services
         private readonly HttpClient _http;
         private readonly SessionService _session;
 
+#if ANDROID
+        private const string BaseUrl = "http://10.22.31.175:5016/";
+#else
         private const string BaseUrl = "http://localhost:5016/";
+#endif
 
         public ApiService(SessionService session)
         {
