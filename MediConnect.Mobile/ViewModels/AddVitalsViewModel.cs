@@ -1,6 +1,7 @@
-﻿using System.Windows.Input;
-using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
+using System.Windows.Input;
+
 
 namespace MediConnect.Mobile.ViewModels
 {
@@ -45,7 +46,7 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private DateTime _recordedAt = DateTime.Today;
+        private DateTime _recordedAt = DateTime.Now;
         public DateTime RecordedAt { get => _recordedAt; set => SetProperty(ref _recordedAt, value); }
 
         private string _temperature = string.Empty;
@@ -97,12 +98,7 @@ namespace MediConnect.Mobile.ViewModels
 
             ErrorMessage = string.Empty;
 
-            // Validation
-            if (RecordedAt.Date > DateTime.Today)
-            {
-                ErrorMessage = "Date cannot be in the future.";
-                return;
-            }
+        
             if (!double.TryParse(Temperature, out var temp) || temp < 30 || temp > 45)
             {
                 ErrorMessage = "Valid temperature (30-45°C) required.";
@@ -129,6 +125,22 @@ namespace MediConnect.Mobile.ViewModels
                 return;
             }
 
+            bool isHighVitals = temp > 38.0 || sys > 140 || dia > 90 || hr > 100;
+
+            if (isHighVitals)
+            {
+                bool confirmSave = await Shell.Current.DisplayAlertAsync(
+    "High Vitals Warning",
+    "The recorded vitals appear to be elevated (e.g., High BP, Fever, or Rapid Heart Rate). Do you still want to save this record?",
+    "Yes, Save",
+    "Cancel");
+
+                if (!confirmSave)
+                {
+                    return; // Aborts saving so the user can review or change the values
+                }
+            }
+
             IsBusy = true;
 
             try
@@ -138,7 +150,7 @@ namespace MediConnect.Mobile.ViewModels
                     var vital = new Vitals
                     {
                         PatientID = _sessionService.PatientID,
-                        RecordedAt = RecordedAt,
+                        RecordedAt = DateTime.Now,
                         Temperature = temp,
                         SystolicBP = sys,
                         DiastolicBP = dia,
@@ -156,7 +168,7 @@ namespace MediConnect.Mobile.ViewModels
                 }
                 else
                 {
-                    SelectedVital.RecordedAt = RecordedAt;
+                    SelectedVital.RecordedAt = DateTime.Now;
                     SelectedVital.Temperature = temp;
                     SelectedVital.SystolicBP = sys;
                     SelectedVital.DiastolicBP = dia;

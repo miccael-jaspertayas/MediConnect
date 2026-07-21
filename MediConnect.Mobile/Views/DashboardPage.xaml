@@ -121,6 +121,89 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Average of Last 3 Vitals Card -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent"
+                IsVisible="{Binding HasVitals}">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Average of Last 3 Readings" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+                        <Label Grid.Column="1" Text="{Binding AverageCountText}" FontSize="11" TextColor="#A6AFBD" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <!-- Average Stat chips -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+
+                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Avg Blood Pressure" FontSize="10" TextColor="#7A8699"/>
+                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding AvgSystolic}"/>
+                                            <Span Text="/"/>
+                                            <Span Text="{Binding AvgDiastolic}"/>
+                                            <Span Text=" mmHg" FontSize="11" TextColor="#7A8699"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Avg Heart Rate" FontSize="10" TextColor="#7A8699"/>
+                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding AvgHeartRate}"/>
+                                            <Span Text=" bpm" FontSize="11" TextColor="#7A8699"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Avg Temperature" FontSize="10" TextColor="#7A8699"/>
+                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <!-- Wait, use AvgTemperature below! -->
+                                            <Span Text="{Binding AvgTemperature}"/>
+                                            <Span Text="°C" FontSize="11" TextColor="#7A8699"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Avg Blood Oxygen" FontSize="10" TextColor="#7A8699"/>
+                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding AvgSpO2}"/>
+                                            <Span Text="%" FontSize="11" TextColor="#7A8699"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
             <!-- Quick Actions -->
             <Label
                 Text="Quick Actions"
