@@ -1,7 +1,7 @@
 ﻿using MediConnect.Mobile.Dtos;
 using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
-using MediConnect.Mobile.ViewModels;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
@@ -21,14 +21,21 @@ namespace MediConnect.Mobile.ViewModels
         private DateTime _dob = DateTime.Today.AddYears(-25);
         public DateTime Dob { get => _dob; set => SetProperty(ref _dob, value); }
 
-        private string _bloodType = string.Empty;
+        public List<string> BloodTypeOptions { get; } = new()
+        {
+            "Unknown", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"
+        };
+
+        private string _bloodType = "Unknown";
         public string BloodType { get => _bloodType; set => SetProperty(ref _bloodType, value); }
 
         private string _allergies = string.Empty;
         public string Allergies { get => _allergies; set => SetProperty(ref _allergies, value); }
 
-        private string _medications = string.Empty;
-        public string Medications { get => _medications; set => SetProperty(ref _medications, value); }
+        public ObservableCollection<MedicationEntry> Medications { get; } = new();
+
+        public ICommand AddMedicationCommand { get; }
+        public ICommand RemoveMedicationCommand { get; }
 
         private string _emergencyContactName = string.Empty;
         public string EmergencyContactName { get => _emergencyContactName; set => SetProperty(ref _emergencyContactName, value); }
@@ -39,22 +46,10 @@ namespace MediConnect.Mobile.ViewModels
         private string _statusMessage = string.Empty;
         public string StatusMessage { get => _statusMessage; set => SetProperty(ref _statusMessage, value); }
 
-        // Medication lookup result
-        private MedicationLookupResult? _lookupResult;
-        public MedicationLookupResult? LookupResult
-        {
-            get => _lookupResult;
-            set => SetProperty(ref _lookupResult, value);
-        }
-        private string _lookupStatusMessage = string.Empty;
-        public string LookupStatusMessage { get => _lookupStatusMessage; set => SetProperty(ref _lookupStatusMessage, value); }
-
         private bool _isSaveSuccess;
-        public bool IsSaveSuccess
-        {
-            get => _isSaveSuccess;
-            set => SetProperty(ref _isSaveSuccess, value);
-        }
+        public bool IsSaveSuccess { get => _isSaveSuccess; set => SetProperty(ref _isSaveSuccess, value); }
+
+        public DateTime MaxDob { get; } = DateTime.Today;
 
         public ICommand LoadCommand { get; }
         public ICommand SaveCommand { get; }
@@ -68,7 +63,33 @@ namespace MediConnect.Mobile.ViewModels
 
             LoadCommand = new Command(async () => await LoadAsync());
             SaveCommand = new Command(async () => await SaveAsync());
-            LookupMedicationCommand = new Command(async () => await LookupMedicationAsync());
+            LookupMedicationCommand = new Command(async () => await LookupAllMedicationsAsync());
+            AddMedicationCommand = new Command(AddMedicationField);
+            RemoveMedicationCommand = new Command<MedicationEntry>(RemoveMedicationField);
+
+            // Always start with at least one field
+            Medications.Add(new MedicationEntry());
+        }
+
+        private void AddMedicationField()
+        {
+            Medications.Add(new MedicationEntry());
+        }
+
+        private void RemoveMedicationField(MedicationEntry? entry)
+        {
+            if (entry == null) return;
+
+            // Never let the list drop to zero fields
+            if (Medications.Count <= 1)
+            {
+                Medications[0].Name = string.Empty;
+                Medications[0].LookupResult = null;
+                Medications[0].LookupStatusMessage = string.Empty;
+                return;
+            }
+
+            Medications.Remove(entry);
         }
 
         public async Task LoadAsync()
@@ -87,12 +108,27 @@ namespace MediConnect.Mobile.ViewModels
                 }
 
                 Name = dto.Name;
-                Dob = dto.DOB ?? DateTime.Today.AddYears(-25);
-                BloodType = dto.BloodType ?? string.Empty;
+                Dob = (dto.DOB.HasValue && dto.DOB.Value <= MaxDob) ? dto.DOB.Value : DateTime.Today.AddYears(-25);
+                BloodType = string.IsNullOrWhiteSpace(dto.BloodType) ? "Unknown" : dto.BloodType;
                 Allergies = dto.Allergies ?? string.Empty;
-                Medications = dto.Medications ?? string.Empty;
                 EmergencyContactName = dto.EmergencyContactName ?? string.Empty;
                 EmergencyContactPhone = dto.EmergencyContactPhone ?? string.Empty;
+
+                // Split the saved comma-separated string back into individual fields
+                Medications.Clear();
+                var savedMeds = (dto.Medications ?? string.Empty)
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToList();
+
+                if (savedMeds.Count == 0)
+                {
+                    Medications.Add(new MedicationEntry());
+                }
+                else
+                {
+                    foreach (var med in savedMeds)
+                        Medications.Add(new MedicationEntry { Name = med });
+                }
             }
             finally
             {
@@ -106,6 +142,13 @@ namespace MediConnect.Mobile.ViewModels
             {
                 IsSaveSuccess = false;
                 StatusMessage = "Name is required.";
+                return false;
+            }
+
+            if (Dob > MaxDob)
+            {
+                IsSaveSuccess = false;
+                StatusMessage = "Date of birth cannot be in the future.";
                 return false;
             }
 
@@ -134,14 +177,20 @@ namespace MediConnect.Mobile.ViewModels
             IsBusy = true;
             try
             {
+                // Join non-empty medication fields into one comma-separated string
+                var medicationsString = string.Join(", ",
+                    Medications
+                        .Select(m => m.Name.Trim())
+                        .Where(name => !string.IsNullOrWhiteSpace(name)));
+
                 var dto = new PatientDto
                 {
                     PatientID = _patientId,
                     Name = Name,
                     DOB = Dob,
-                    BloodType = BloodType,
+                    BloodType = BloodType == "Unknown" ? null : BloodType,
                     Allergies = Allergies,
-                    Medications = Medications,
+                    Medications = medicationsString,
                     EmergencyContactName = EmergencyContactName,
                     EmergencyContactPhone = EmergencyContactPhone
                 };
@@ -157,22 +206,29 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        private async Task LookupMedicationAsync()
+        private async Task LookupAllMedicationsAsync()
         {
             if (IsBusy) return;
-            if (string.IsNullOrWhiteSpace(Medications))
+
+            var entriesToLookup = Medications.Where(m => !string.IsNullOrWhiteSpace(m.Name)).ToList();
+
+            if (entriesToLookup.Count == 0)
             {
-                LookupStatusMessage = "Enter a medication name first.";
-                LookupResult = null;
+                StatusMessage = "Enter at least one medication first.";
                 return;
             }
 
             IsBusy = true;
             try
             {
-                var result = await _externalApi.LookupMedicationAsync(Medications);
-                LookupResult = result;
-                LookupStatusMessage = result.Found ? string.Empty : "No info found.";
+                // Look up each medication independently so one failure
+                // doesn't block the others, and each field gets its own result.
+                foreach (var entry in entriesToLookup)
+                {
+                    var result = await _externalApi.LookupMedicationAsync(entry.Name);
+                    entry.LookupResult = result;
+                    entry.LookupStatusMessage = result.Found ? string.Empty : "No info found.";
+                }
             }
             finally
             {
