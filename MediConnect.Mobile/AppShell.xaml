@@ -9,13 +9,13 @@
     <ShellContent Route="Register" ContentTemplate="{DataTemplate views:RegisterPage}" />
     
     <TabBar>
-        <ShellContent Route="Dashboard" Title="Home" Icon="home.png"
+        <ShellContent Route="Dashboard" Title="Home" Icon="dashboard.svg"
                       ContentTemplate="{DataTemplate views:DashboardPage}" />
-        <ShellContent Route="Vitals" Title="Vitals" Icon="vitals.png"
+        <ShellContent Route="Vitals" Title="Vitals" Icon="vitals.svg"
                       ContentTemplate="{DataTemplate views:VitalsPage}" />
-        <ShellContent Route="Records" Title="Records" Icon="records.png"
+        <ShellContent Route="Records" Title="Records" Icon="records.svg"
                       ContentTemplate="{DataTemplate views:RecordsPage}" />
-        <ShellContent Route="Triage" Title="Triage" Icon="triage.png"
+        <ShellContent Route="Triage" Title="Triage" Icon="triage.svg"
                       ContentTemplate="{DataTemplate views:TriagePage}" />
     </TabBar>
 

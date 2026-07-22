@@ -12,28 +12,35 @@ namespace MediConnect.Mobile.Services
         }
 
         // Get all vitals for a patient
-        public async Task<List<VitalsModel>> GetVitalsAsync(int patientId)
+        public async Task<List<Vitals>> GetVitalsAsync(int patientId)
         {
-            return await _apiService.GetAsync<List<VitalsModel>>
+            return await _apiService.GetAsync<List<Vitals>>
             (
                 $"api/vitals/patient/{patientId}"
-            ) ?? new List<VitalsModel>();
+            ) ?? new List<Vitals>();
+        }
+
+        // Get a single vitals entry by VitalID
+        public async Task<Vitals?> GetVitalAsync(int vitalId)
+        {
+            return await _apiService.GetAsync<Vitals>
+            (
+                $"api/vitals/{vitalId}"
+            );
         }
 
         // Add a new vitals record
-        public async Task<bool> AddVitalsAsync(VitalsModel vitals)
+        public async Task<Vitals?> AddVitalsAsync(Vitals vitals)
         {
-            var result = await _apiService.PostAsync<VitalsModel, VitalsModel>
+            return await _apiService.PostAsync<Vitals, Vitals>
             (
                 "api/vitals",
                 vitals
             );
-
-            return result != null;
         }
 
         // Update an existing vitals record
-        public async Task<bool> UpdateVitalsAsync(VitalsModel vitals)
+        public async Task<bool> UpdateVitalsAsync(Vitals vitals)
         {
             return await _apiService.PutAsync
             (

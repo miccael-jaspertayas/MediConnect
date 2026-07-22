@@ -4,6 +4,7 @@ using MediConnect.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediConnect.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260715201139_ReplaceWeightWithSpO2")]
+    partial class ReplaceWeightWithSpO2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,42 +105,6 @@ namespace MediConnect.Api.Migrations
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("MediConnect.Api.Models.TriageLog", b =>
-                {
-                    b.Property<int>("LogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("LogID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Explanation")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("PatientID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Symptoms")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Tier")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("LogID");
-
-                    b.HasIndex("PatientID");
-
-                    b.ToTable("TriageLogs");
-                });
-
             modelBuilder.Entity("MediConnect.Api.Models.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -211,17 +178,6 @@ namespace MediConnect.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MediConnect.Api.Models.TriageLog", b =>
-                {
-                    b.HasOne("MediConnect.Api.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("MediConnect.Api.Models.Vitals", b =>

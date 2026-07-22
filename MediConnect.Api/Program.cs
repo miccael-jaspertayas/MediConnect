@@ -94,7 +94,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<TriageService>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
 builder.Services.AddScoped<IVitalsRepository, VitalsRepository>();
+builder.Services.AddScoped<VitalsService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<TriageLogService>();
 
 
 var app = builder.Build();

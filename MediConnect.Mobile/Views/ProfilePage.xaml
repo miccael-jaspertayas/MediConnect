@@ -5,7 +5,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.ProfilePage"
     x:DataType="vm:ProfileViewModel"
-    Title="My Profile"
+    Title=""
     BackgroundColor="#F4F6FA">
 
     <ScrollView>

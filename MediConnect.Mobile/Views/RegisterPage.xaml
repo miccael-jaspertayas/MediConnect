@@ -1,16 +1,181 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
-             x:Class="MediConnect.Mobile.Views.RegisterPage"
-             x:DataType="vm:RegisterViewModel"
-             Title="Register">
-    <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
-        <Label Text="Create Account" FontSize="24" HorizontalOptions="Center" />
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
-        <Label Text="{Binding StatusMessage}" />
-        <Button Text="Register" Command="{Binding RegisterCommand}" />
-    </VerticalStackLayout>
-</ContentPage>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
+    x:Class="MediConnect.Mobile.Views.RegisterPage"
+    x:DataType="vm:RegisterViewModel"
+    BackgroundColor="#F4F6FA"
+    NavigationPage.HasNavigationBar="False">
 
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="25,50"
+            Spacing="18">
+
+            <!-- Spacer -->
+            <VerticalStackLayout HeightRequest="60"/>
+
+            <!-- App Name -->
+            <Label
+                Text="MediConnect"
+                FontSize="34"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                TextColor="#006D7F"/>
+
+            <Label
+                Text="Your Personal Health Companion"
+                FontSize="15"
+                HorizontalOptions="Center"
+                TextColor="#6F7D8B"/>
+
+            <VerticalStackLayout Margin="0,35,0,0"
+                                 Spacing="15">
+
+                <!-- Email -->
+
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+
+                    <Grid
+                        Padding="14,6"
+                        ColumnDefinitions="35,*">
+
+                        <Label
+                            Text="✉"
+                            FontSize="18"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="#A6AFBD"/>
+
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="Email Address"
+                            Keyboard="Email"
+                            Text="{Binding Email}"
+                            BackgroundColor="Transparent"
+                            TextColor="Black"
+                            PlaceholderColor="#A6AFBD"/>
+                    </Grid>
+
+                </Border>
+
+                <!-- Password -->
+                
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+
+                    <Grid Padding="14,6" ColumnDefinitions="35,*,40">
+                        <Label
+                            Text="🔒"
+                            FontSize="18"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="#A6AFBD"/>
+
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="Password"
+                            IsPassword="{Binding IsPasswordHidden}"
+                            Text="{Binding Password}"
+                            BackgroundColor="Transparent"
+                            TextColor="Black"
+                            PlaceholderColor="#A6AFBD"/>
+
+                        <Button
+                            Grid.Column="2"
+                            Text="{Binding IsPasswordHidden, Converter={StaticResource BoolToEyeIconConverter}}"
+                            Command="{Binding TogglePasswordCommand}"
+                            BackgroundColor="Transparent"
+                            FontSize="18"/>
+                    </Grid>
+                </Border>
+
+                <!-- Confirm Password -->
+                
+                <Border
+                    Stroke="#D8DEE8"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="White">
+
+                    <Grid Padding="14,6" ColumnDefinitions="35,*,40">
+                        <Label
+                            Text="🔒"
+                            FontSize="18"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            TextColor="#A6AFBD"/>
+
+                        <Entry
+                            Grid.Column="1"
+                            Placeholder="Confirm Password"
+                            IsPassword="{Binding IsConfirmPasswordHidden}"
+                            Text="{Binding ConfirmPassword}"
+                            BackgroundColor="Transparent"
+                            TextColor="Black"
+                            PlaceholderColor="#A6AFBD"/>
+
+                        <Button
+                            Grid.Column="2"
+                            Text="{Binding IsConfirmPasswordHidden, Converter={StaticResource BoolToEyeIconConverter}}"
+                            Command="{Binding ToggleConfirmPasswordCommand}"
+                            BackgroundColor="Transparent"
+                            FontSize="18"/>
+                    </Grid>
+                </Border>
+
+                <!-- Status -->
+
+                <Label
+                    Text="{Binding StatusMessage}"
+                    TextColor="{Binding IsRegisterSuccess, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#1C6F6F|#E5484D'}"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+                <!-- Register -->
+
+                <Button
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="Register"
+                    Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+
+            </VerticalStackLayout>
+
+            <!-- Back to Login -->
+
+            <VerticalStackLayout
+                Margin="0,25,0,0"
+                HorizontalOptions="Center">
+
+                <Label
+                    Text="Already have an account?"
+                    TextColor="#6F7D8B"
+                    HorizontalOptions="Center"/>
+
+                <Label
+                    Text="Log In"
+                    FontAttributes="Bold"
+                    TextColor="#006D7F"
+                    HorizontalOptions="Center">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnLoginTapped"/>
+                    </Label.GestureRecognizers>
+
+                </Label>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

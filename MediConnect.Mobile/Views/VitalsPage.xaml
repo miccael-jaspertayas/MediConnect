@@ -6,7 +6,7 @@
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.VitalsPage"
     x:DataType="vm:VitalsViewModel"
-    Title="Vitals"
+    Title=""
     BackgroundColor="#F4F6FA">
 
     <Grid>
@@ -59,72 +59,102 @@
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
-
-                    <DataTemplate x:DataType="models:VitalsModel">
-
-                        <Border
-                            Padding="16"
-                            BackgroundColor="White"
-                            StrokeShape="RoundRectangle 16"
-                            Stroke="Transparent">
-
+                    <DataTemplate x:DataType="models:Vitals">
+                        <Border Padding="16" BackgroundColor="White" StrokeShape="RoundRectangle 16" Stroke="Transparent">
                             <Border.Shadow>
-                                <Shadow
-                                    Brush="#000000"
-                                    Radius="8"
-                                    Opacity="0.06"
-                                    Offset="0,2"/>
+                                <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
                             </Border.Shadow>
 
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Tapped="VitalCard_Tapped"
-                                    CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer Tapped="VitalCard_Tapped" CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
 
-                            <VerticalStackLayout Spacing="8">
+                            <VerticalStackLayout Spacing="12">
 
-                                <Label
-                                    Text="{Binding RecordedAt, StringFormat='{}{0:MMMM dd, yyyy}'}"
-                                    FontAttributes="Bold"
-                                    FontSize="16"
-                                    TextColor="#1C6F6F"/>
-
-                                <Grid ColumnDefinitions="*,*">
-
-                                    <Label
-                                        Grid.Column="0"
-                                        Text="{Binding HeartRate, StringFormat='Heart Rate: {0} bpm'}"/>
-
-                                    <Label
-                                        Grid.Column="1"
-                                        Text="{Binding Temperature, StringFormat='Temp: {0} °C'}"/>
-
+                                <!-- Date header row -->
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                        <Label Text="{Binding RecordedAt, StringFormat='{0:MMM d, yyyy}'}"
+                               FontSize="14" FontAttributes="Bold" TextColor="#1E2A38"/>
+                                        <Label Text="{Binding RecordedAt, StringFormat='{0:h:mm tt}'}"
+                               FontSize="11" TextColor="#A6AFBD"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="2" Text="›" FontSize="22" TextColor="#B7C0CC" VerticalOptions="Center"/>
                                 </Grid>
 
-                                <Grid ColumnDefinitions="*,*">
+                                <BoxView HeightRequest="1" BackgroundColor="#E4E9F0"/>
 
-                                    <Label
-                                        Grid.Column="0"
-                                        Text="{Binding SystolicBP, StringFormat='BP: {0}'}"/>
+                                <!-- Vitals grid: 2x2 stat chips -->
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
 
-                                    <Label
-                                        Grid.Column="1"
-                                        Text="{Binding DiastolicBP, StringFormat='/ {0}'}"/>
+                                    <!-- Blood Pressure -->
+                                    <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="Blood Pressure" FontSize="10" TextColor="#7A8699"/>
+                                            <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding SystolicBP}"/>
+                                                        <Span Text="/"/>
+                                                        <Span Text="{Binding DiastolicBP}"/>
+                                                        <Span Text=" mmHg" FontSize="11" FontAttributes="None" TextColor="#7A8699"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
+
+                                    <!-- Heart Rate -->
+                                    <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="Heart Rate" FontSize="10" TextColor="#7A8699"/>
+                                            <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding HeartRate}"/>
+                                                        <Span Text=" bpm" FontSize="11" FontAttributes="None" TextColor="#7A8699"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
+
+                                    <!-- Temperature -->
+                                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="Temperature" FontSize="10" TextColor="#7A8699"/>
+                                            <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Temperature}"/>
+                                                        <Span Text="°C" FontSize="11" FontAttributes="None" TextColor="#7A8699"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
+
+                                    <!-- SpO2 -->
+                                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="Blood Oxygen" FontSize="10" TextColor="#7A8699"/>
+                                            <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding SpO2}"/>
+                                                        <Span Text="%" FontSize="11" FontAttributes="None" TextColor="#7A8699"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
 
                                 </Grid>
-
-                                <Label
-                                    Text="{Binding Weight, StringFormat='Weight: {0} kg'}"/>
 
                             </VerticalStackLayout>
-
                         </Border>
-
                     </DataTemplate>
-
                 </CollectionView.ItemTemplate>
-
             </CollectionView>
 
         </VerticalStackLayout>
