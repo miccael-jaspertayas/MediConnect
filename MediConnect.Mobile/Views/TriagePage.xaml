@@ -83,14 +83,14 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Check button -->
+            <!-- Check / Update button -->
             <Border StrokeShape="RoundRectangle 24"
                     BackgroundColor="#1F7A70"
                     Padding="0,14">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding CheckSymptomsCommand}" />
                 </Border.GestureRecognizers>
-                <Label Text="Check Symptoms"
+                <Label Text="{Binding CheckButtonText}"
                        TextColor="White"
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
@@ -108,20 +108,6 @@
                     <Label Text="{Binding ResultTier}" FontAttributes="Bold" TextColor="White" FontSize="18" />
                     <Label Text="{Binding ResultExplanation}" TextColor="White" />
                 </VerticalStackLayout>
-            </Border>
-
-            <!-- Log / Update button -->
-            <Border StrokeShape="RoundRectangle 24"
-                BackgroundColor="#111827"
-                Padding="0,14"
-                IsVisible="{Binding HasCheckedResult}">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding LogSymptomsCommand}" />
-                        </Border.GestureRecognizers>
-                <Label Text="{Binding LogButtonText}"
-                   TextColor="White"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
             </Border>
 
             <Label Text="Cancel Edit"

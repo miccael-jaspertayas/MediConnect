@@ -16,7 +16,7 @@ namespace MediConnect.Mobile.ViewModels
         private const int HistoryPageSize = 10;
         private bool _hasMoreHistory = true;
 
-        private int? _editingLogId = null; // null = adding new, set = editing existing
+        private int? _editingLogId = null; // null = creating a new log, set = updating an existing one
 
         public ObservableCollection<string> Suggestions { get; } = new();
         public ObservableCollection<string> SelectedSymptoms { get; } = new();
@@ -61,10 +61,12 @@ namespace MediConnect.Mobile.ViewModels
         public bool IsEditing
         {
             get => _isEditing;
-            set { _isEditing = value; OnPropertyChanged(); OnPropertyChanged(nameof(LogButtonText)); }
+            set { _isEditing = value; OnPropertyChanged(); OnPropertyChanged(nameof(CheckButtonText)); }
         }
 
-        public string LogButtonText => IsEditing ? "Update Log" : "Add/Log Symptom(s)";
+        // Replaces the old separate "Log Symptoms" button text —
+        // the single Check/Save button now changes label based on edit state.
+        public string CheckButtonText => IsEditing ? "Update Check-in" : "Check Symptoms";
 
         public Color ResultColor => ResultTier switch
         {
@@ -77,7 +79,6 @@ namespace MediConnect.Mobile.ViewModels
         public ICommand SelectSymptomCommand { get; }
         public ICommand RemoveSymptomCommand { get; }
         public ICommand CheckSymptomsCommand { get; }
-        public ICommand LogSymptomsCommand { get; }
         public ICommand CancelEditCommand { get; }
         public ICommand EditLogCommand { get; }
         public ICommand DeleteLogCommand { get; }
@@ -101,8 +102,7 @@ namespace MediConnect.Mobile.ViewModels
 
             RemoveSymptomCommand = new Command<string>(symptom => SelectedSymptoms.Remove(symptom));
 
-            CheckSymptomsCommand = new Command(async () => await CheckSymptomsAsync());
-            LogSymptomsCommand = new Command(async () => await LogSymptomsAsync());
+            CheckSymptomsCommand = new Command(async () => await CheckAndLogSymptomsAsync());
             CancelEditCommand = new Command(CancelEdit);
             EditLogCommand = new Command<TriageLogResponse>(StartEdit);
             DeleteLogCommand = new Command<TriageLogResponse>(async (log) => await DeleteLogAsync(log));
@@ -137,8 +137,9 @@ namespace MediConnect.Mobile.ViewModels
             catch (TaskCanceledException) { }
         }
 
-        // Pure lookup -- does not save anything
-        private async Task CheckSymptomsAsync()
+        // Checks symptoms AND saves the result in one step — creates a new
+        // log normally, or updates the log being edited if IsEditing is true.
+        private async Task CheckAndLogSymptomsAsync()
         {
             if (SelectedSymptoms.Count == 0)
             {
@@ -151,62 +152,27 @@ namespace MediConnect.Mobile.ViewModels
             try
             {
                 var request = new TriageRequest { PatientID = _session.PatientID, Symptoms = SelectedSymptoms.ToList() };
-                var response = await _apiService.PostAsync<TriageRequest, TriageResponse>("api/triage/assess", request);
+
+                TriageLogResponse? response;
+
+                if (_editingLogId is int id)
+                {
+                    response = await _apiService.PutAsync<TriageRequest, TriageLogResponse>($"api/triage/log/{id}", request);
+                }
+                else
+                {
+                    response = await _apiService.PostAsync<TriageRequest, TriageLogResponse>("api/triage/assess", request);
+                }
 
                 if (response is null)
                 {
                     ResultTier = string.Empty;
                     ResultExplanation = "Unable to check symptoms right now. Please try again.";
+                    return;
                 }
-                else
-                {
-                    ResultTier = response.Tier;
-                    ResultExplanation = response.Explanation;
-                }
-            }
-            catch (Exception)
-            {
-                ResultTier = string.Empty;
-                ResultExplanation = "Unable to check symptoms right now. Please try again.";
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
 
-        // Explicit save (or update, if _editingLogId is set)
-        private async Task LogSymptomsAsync()
-        {
-            if (SelectedSymptoms.Count == 0)
-            {
-                await ShowAlertAsync("Nothing to log", "Please select at least one symptom first.");
-                return;
-            }
-
-            IsLoading = true;
-            try
-            {
-                var request = new TriageRequest { PatientID = _session.PatientID, Symptoms = SelectedSymptoms.ToList() };
-
-                if (_editingLogId is int id)
-                {
-                    var updated = await _apiService.PutAsync($"api/triage/log/{id}", request);
-                    if (!updated)
-                    {
-                        await ShowAlertAsync("Update failed", "Could not update this log entry. Please try again.");
-                        return;
-                    }
-                }
-                else
-                {
-                    var created = await _apiService.PostAsync<TriageRequest, TriageLogResponse>("api/triage/log", request);
-                    if (created is null)
-                    {
-                        await ShowAlertAsync("Log failed", "Could not log these symptoms. Please try again.");
-                        return;
-                    }
-                }
+                ResultTier = response.Tier;
+                ResultExplanation = response.Explanation;
 
                 // Refresh history from page 1 so the new/updated entry shows correctly
                 _historyPage = 1;
@@ -214,7 +180,14 @@ namespace MediConnect.Mobile.ViewModels
                 History.Clear();
                 await LoadHistoryAsync();
 
-                CancelEdit(); // resets editing state, clears selection
+                _editingLogId = null;
+                IsEditing = false;
+                SelectedSymptoms.Clear();
+            }
+            catch (Exception)
+            {
+                ResultTier = string.Empty;
+                ResultExplanation = "Unable to check symptoms right now. Please try again.";
             }
             finally
             {
@@ -303,8 +276,6 @@ namespace MediConnect.Mobile.ViewModels
             }
         }
 
-        // Simple dialog helpers -- calling MainPage directly here is a pragmatic shortcut
-        // for a student project; a stricter MVVM setup would inject a dialog/navigation service.
         private static Task ShowAlertAsync(string title, string message) =>
             Application.Current?.MainPage?.DisplayAlertAsync(title, message, "OK") ?? Task.CompletedTask;
 
