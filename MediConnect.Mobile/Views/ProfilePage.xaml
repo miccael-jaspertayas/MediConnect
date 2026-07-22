@@ -63,7 +63,11 @@
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Date of Birth" FontSize="12" TextColor="#7A8699"/>
                         <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
-                            <DatePicker Date="{Binding Dob}" Margin="14,0" TextColor="Black"/>
+                            <DatePicker
+                                Date="{Binding Dob}"
+                                MaximumDate="{Binding MaxDob}"
+                                Margin="14,0"
+                                TextColor="Black"/>
                         </Border>
                     </VerticalStackLayout>
 
@@ -71,13 +75,12 @@
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Blood Type" FontSize="12" TextColor="#7A8699"/>
                         <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
-                            <Entry
-                                Placeholder="e.g. O+"
-                                Text="{Binding BloodType}"
+                            <Picker
+                                ItemsSource="{Binding BloodTypeOptions}"
+                                SelectedItem="{Binding BloodType}"
                                 Margin="14,0"
-                                BackgroundColor="Transparent"
                                 TextColor="Black"
-                                PlaceholderColor="#A6AFBD"/>
+                                BackgroundColor="Transparent"/>
                         </Border>
                     </VerticalStackLayout>
 
@@ -113,20 +116,119 @@
                     </VerticalStackLayout>
 
                     <!-- Medications -->
-                    <VerticalStackLayout Spacing="6">
+                    <VerticalStackLayout Spacing="10">
                         <Label Text="Medications" FontSize="12" TextColor="#7A8699"/>
-                        <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
-                            <Editor
-                                Text="{Binding Medications}"
-                                AutoSize="TextChanges"
-                                Margin="14,10"
-                                BackgroundColor="Transparent"
-                                TextColor="Black"
-                                PlaceholderColor="#A6AFBD"/>
-                        </Border>
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Medications}" Spacing="10">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:MedicationEntry">
+                                    <VerticalStackLayout Spacing="6">
+
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                            <Border Grid.Column="0" Stroke="#D8DEE8" StrokeShape="RoundRectangle 14" BackgroundColor="White">
+                                                <Entry
+                                                    Text="{Binding Name}"
+                                                    Placeholder="e.g. Aspirin"
+                                                    Margin="14,0"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="Black"
+                                                    PlaceholderColor="#A6AFBD"/>
+                                            </Border>
+
+                                            <Button
+                                                Grid.Column="1"
+                                                Text="✕"
+                                                FontSize="14"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                CornerRadius="20"
+                                                Padding="0"
+                                                BackgroundColor="#F4F6FA"
+                                                TextColor="#E5484D"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfileViewModel}}, Path=RemoveMedicationCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                        </Grid>
+
+                                        <Label
+                                            Text="{Binding LookupStatusMessage}"
+                                            FontSize="12"
+                                            TextColor="#E5484D"
+                                            IsVisible="{Binding LookupStatusMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                                        <!-- Per-medication lookup result card -->
+                                        <Border
+                                            IsVisible="{Binding LookupResult.Found}"
+                                            Padding="14"
+                                            BackgroundColor="#F4F6FA"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="#E4E9F0">
+
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label Text="{Binding LookupResult.BrandName}" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+                                                <Label Text="{Binding LookupResult.GenericName, StringFormat='Generic: {0}'}" FontSize="12" TextColor="#7A8699"/>
+                                                <Label Text="{Binding LookupResult.Manufacturer, StringFormat='Manufacturer: {0}'}" FontSize="12" TextColor="#7A8699"/>
+                                                <Label Text="{Binding LookupResult.Route, StringFormat='Route: {0}'}" FontSize="12" TextColor="#7A8699"/>
+
+                                                <Label Text="Usage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"/>
+                                                <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding LookupResult.UsageLines}">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate x:DataType="x:String">
+                                                            <Grid ColumnDefinitions="16,*">
+                                                                <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
+                                                                <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </VerticalStackLayout>
+
+                                                <Label Text="Dosage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"
+                                                        IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}"/>
+                                                <VerticalStackLayout Spacing="4"
+                                                        BindableLayout.ItemsSource="{Binding LookupResult.DosageLines}"
+                                                        IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate x:DataType="x:String">
+                                                            <Grid ColumnDefinitions="16,*">
+                                                                <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
+                                                                <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </VerticalStackLayout>
+
+                                                <Label Text="Warnings" FontSize="12" FontAttributes="Bold" TextColor="#E5484D" Margin="0,6,0,0"
+                                                        IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}"/>
+                                                <VerticalStackLayout Spacing="4"
+                                                  BindableLayout.ItemsSource="{Binding LookupResult.WarningsLines}"
+                                                  IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate x:DataType="x:String">
+                                                            <Grid ColumnDefinitions="16,*">
+                                                                <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#E5484D" VerticalOptions="Start"/>
+                                                                <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#E5484D" LineBreakMode="WordWrap"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </VerticalStackLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
 
                         <Button
-                            Text="Look up medication"
+                            Text="+ Add Medication"
+                            Command="{Binding AddMedicationCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#1C6F6F"
+                            FontAttributes="Bold"
+                            FontSize="13"
+                            HorizontalOptions="Start"/>
+
+                        <Button
+                            Text="Look up all medications"
                             Command="{Binding LookupMedicationCommand}"
                             BackgroundColor="#E3F1F0"
                             TextColor="#1C6F6F"
@@ -134,75 +236,7 @@
                             FontSize="13"
                             CornerRadius="14"
                             HeightRequest="40"/>
-
-                        <Label
-                            Text="{Binding LookupStatusMessage}"
-                            FontSize="12"
-                            TextColor="#E5484D"
-                            IsVisible="{Binding LookupStatusMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
                     </VerticalStackLayout>
-
-                    <!-- Medication lookup result -->
-                    <Border
-                        IsVisible="{Binding LookupResult.Found}"
-                        Padding="14"
-                        BackgroundColor="#F4F6FA"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="#E4E9F0">
-
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="{Binding LookupResult.BrandName}" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
-                            <Label Text="{Binding LookupResult.GenericName, StringFormat='Generic: {0}'}" FontSize="12" TextColor="#7A8699"/>
-                            <Label Text="{Binding LookupResult.Manufacturer, StringFormat='Manufacturer: {0}'}" FontSize="12" TextColor="#7A8699"/>
-                            <Label Text="{Binding LookupResult.Route, StringFormat='Route: {0}'}" FontSize="12" TextColor="#7A8699"/>
-
-                            <!-- Usage -->
-                            <Label Text="Usage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"/>
-                            <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding LookupResult.UsageLines}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <Grid ColumnDefinitions="16,*">
-                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
-                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </VerticalStackLayout>
-
-                            <!-- Dosage -->
-                            <Label Text="Dosage" FontSize="12" FontAttributes="Bold" TextColor="#1C6F6F" Margin="0,6,0,0"
-                                    IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}"/>
-                            <VerticalStackLayout Spacing="4"
-                              BindableLayout.ItemsSource="{Binding LookupResult.DosageLines}"
-                              IsVisible="{Binding LookupResult.Dosage, Converter={StaticResource StringNotEmptyConverter}}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <Grid ColumnDefinitions="16,*">
-                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#1C6F6F" VerticalOptions="Start"/>
-                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#1E2A38" LineBreakMode="WordWrap"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </VerticalStackLayout>
-
-                            <!-- Warnings -->
-                            <Label Text="Warnings" FontSize="12" FontAttributes="Bold" TextColor="#E5484D" Margin="0,6,0,0"
-                                    IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}"/>
-                            <VerticalStackLayout Spacing="4"
-                              BindableLayout.ItemsSource="{Binding LookupResult.WarningsLines}"
-                              IsVisible="{Binding LookupResult.Warnings, Converter={StaticResource StringNotEmptyConverter}}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <Grid ColumnDefinitions="16,*">
-                                            <Label Grid.Column="0" Text="•" FontSize="13" TextColor="#E5484D" VerticalOptions="Start"/>
-                                            <Label Grid.Column="1" Text="{Binding .}" FontSize="13" TextColor="#E5484D" LineBreakMode="WordWrap"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </VerticalStackLayout>
-
-                        </VerticalStackLayout>
-                    </Border>
 
                 </VerticalStackLayout>
             </Border>
