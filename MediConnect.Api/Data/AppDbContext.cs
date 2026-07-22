@@ -11,6 +11,7 @@ namespace MediConnect.Api.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Vitals> Vitals { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public DbSet<TriageLog> TriageLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

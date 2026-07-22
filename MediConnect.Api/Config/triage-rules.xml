@@ -1,255 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <TriageRules>
-	<!-- General / Constitutional -->
 	<Rule Keyword="fever" Weight="2" Tier="LocalHealthUnit" />
 	<Rule Keyword="high fever" Weight="3" Tier="Hospital" />
-	<Rule Keyword="persistent fever" Weight="4" Tier="Hospital" />
-	<Rule Keyword="chills" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="chills with fever" Weight="3" Tier="Hospital" />
-	<Rule Keyword="fatigue" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="generalized weakness" Weight="2" Tier="Hospital" />
-	<Rule Keyword="night sweats" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="unexplained weight loss" Weight="3" Tier="Hospital" />
-	<Rule Keyword="unexplained weight gain" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="malaise" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="loss of appetite" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="excessive thirst" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="excessive hunger" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="swollen lymph nodes" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="body pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="excessive sweating" Weight="1" Tier="LocalHealthUnit" />
-
-	<!-- Respiratory -->
 	<Rule Keyword="cough" Weight="1" Tier="LocalHealthUnit" />
 	<Rule Keyword="persistent cough" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="cough with blood" Weight="7" Tier="Emergency" />
+	<Rule Keyword="sore throat" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="headache" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="body pain" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="fatigue" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="diarrhea" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="vomiting" Weight="3" Tier="Hospital" />
+	<Rule Keyword="nausea" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="dizziness" Weight="2" Tier="Hospital" />
+	<Rule Keyword="abdominal pain" Weight="3" Tier="Hospital" />
 	<Rule Keyword="shortness of breath" Weight="4" Tier="Hospital" />
 	<Rule Keyword="difficulty breathing" Weight="6" Tier="Emergency" />
-	<Rule Keyword="wheezing" Weight="3" Tier="Hospital" />
-	<Rule Keyword="sore throat" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="runny nose" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="nasal congestion" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="sneezing" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="hoarseness" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="chest tightness" Weight="4" Tier="Hospital" />
-	<Rule Keyword="rapid breathing" Weight="5" Tier="Hospital" />
-	<Rule Keyword="rapid shallow breathing" Weight="5" Tier="Hospital" />
-	<Rule Keyword="noisy breathing" Weight="4" Tier="Hospital" />
-	<Rule Keyword="blue lips or face" Weight="8" Tier="Emergency" />
-	<Rule Keyword="choking" Weight="7" Tier="Emergency" />
-	<Rule Keyword="whooping cough" Weight="3" Tier="Hospital" />
-
-	<!-- Cardiovascular -->
 	<Rule Keyword="chest pain" Weight="6" Tier="Emergency" />
-	<Rule Keyword="chest pressure" Weight="6" Tier="Emergency" />
-	<Rule Keyword="pain radiating to arm" Weight="7" Tier="Emergency" />
-	<Rule Keyword="pain radiating to jaw" Weight="7" Tier="Emergency" />
-	<Rule Keyword="palpitations" Weight="3" Tier="Hospital" />
-	<Rule Keyword="irregular heartbeat" Weight="4" Tier="Hospital" />
-	<Rule Keyword="rapid heartbeat" Weight="3" Tier="Hospital" />
-	<Rule Keyword="swelling in legs" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="swelling in ankles" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="cold hands and feet" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="fainting" Weight="6" Tier="Emergency" />
-	<Rule Keyword="cold clammy skin" Weight="6" Tier="Emergency" />
-
-	<!-- Gastrointestinal -->
-	<Rule Keyword="nausea" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="vomiting" Weight="3" Tier="Hospital" />
-	<Rule Keyword="vomiting blood" Weight="8" Tier="Emergency" />
-	<Rule Keyword="diarrhea" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="bloody diarrhea" Weight="6" Tier="Emergency" />
-	<Rule Keyword="constipation" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="abdominal pain" Weight="3" Tier="Hospital" />
-	<Rule Keyword="severe abdominal pain" Weight="6" Tier="Emergency" />
-	<Rule Keyword="bloating" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="heartburn" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="black stool" Weight="6" Tier="Emergency" />
-	<Rule Keyword="jaundice" Weight="4" Tier="Hospital" />
-	<Rule Keyword="difficulty swallowing" Weight="4" Tier="Hospital" />
-	<Rule Keyword="indigestion" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="stomach cramps" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="rectal bleeding" Weight="5" Tier="Hospital" />
-	<Rule Keyword="gas" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="food intolerance" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="hemorrhoids" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="anal pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="yellowing of skin" Weight="4" Tier="Hospital" />
-
-	<!-- Neurological -->
-	<Rule Keyword="headache" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="severe headache" Weight="4" Tier="Hospital" />
-	<Rule Keyword="sudden severe headache" Weight="7" Tier="Emergency" />
-	<Rule Keyword="migraine" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="dizziness" Weight="2" Tier="Hospital" />
-	<Rule Keyword="vertigo" Weight="2" Tier="LocalHealthUnit" />
+	<Rule Keyword="severe bleeding" Weight="7" Tier="Emergency" />
 	<Rule Keyword="loss of consciousness" Weight="8" Tier="Emergency" />
 	<Rule Keyword="seizure" Weight="7" Tier="Emergency" />
+	<Rule Keyword="severe allergic reaction" Weight="7" Tier="Emergency" />
 	<Rule Keyword="numbness on one side" Weight="6" Tier="Emergency" />
 	<Rule Keyword="slurred speech" Weight="6" Tier="Emergency" />
-	<Rule Keyword="difficulty speaking" Weight="6" Tier="Emergency" />
-	<Rule Keyword="facial drooping" Weight="8" Tier="Emergency" />
-	<Rule Keyword="confusion" Weight="5" Tier="Hospital" />
-	<Rule Keyword="disorientation" Weight="5" Tier="Hospital" />
-	<Rule Keyword="memory loss" Weight="3" Tier="Hospital" />
-	<Rule Keyword="tremors" Weight="3" Tier="Hospital" />
-	<Rule Keyword="loss of balance" Weight="3" Tier="Hospital" />
-	<Rule Keyword="loss of coordination" Weight="4" Tier="Hospital" />
-	<Rule Keyword="blurred vision" Weight="3" Tier="Hospital" />
-	<Rule Keyword="double vision" Weight="4" Tier="Hospital" />
-	<Rule Keyword="sudden vision loss" Weight="7" Tier="Emergency" />
-	<Rule Keyword="tingling sensation" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="tingling in hands" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="tingling in feet" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="weakness in limbs" Weight="5" Tier="Hospital" />
-	<Rule Keyword="neck stiffness with fever" Weight="7" Tier="Emergency" />
-
-	<!-- Musculoskeletal -->
-	<Rule Keyword="joint pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="back pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="severe back pain" Weight="3" Tier="Hospital" />
-	<Rule Keyword="muscle pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="muscle cramps" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="swelling in joints" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="stiffness" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="limited range of motion" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="bone pain" Weight="3" Tier="Hospital" />
-	<Rule Keyword="neck pain" Weight="1" Tier="LocalHealthUnit" />
-
-	<!-- Dermatological -->
 	<Rule Keyword="rash" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="itching" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="hives" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="skin discoloration" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="bruising easily" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="dry skin" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="skin ulcers" Weight="3" Tier="Hospital" />
-	<Rule Keyword="skin peeling" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="blistering skin" Weight="3" Tier="Hospital" />
-	<Rule Keyword="severe allergic reaction" Weight="7" Tier="Emergency" />
-	<Rule Keyword="swelling of face or lips" Weight="7" Tier="Emergency" />
-	<Rule Keyword="throat swelling" Weight="8" Tier="Emergency" />
-
-	<!-- Eyes / Ears / Nose / Throat -->
-	<Rule Keyword="ear pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="ear discharge" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="hearing loss" Weight="3" Tier="Hospital" />
-	<Rule Keyword="ringing in ears" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="eye pain" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="eye redness" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="eye discharge" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="sensitivity to light" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="nosebleed" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="loss of smell" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="loss of taste" Weight="1" Tier="LocalHealthUnit" />
-
-	<!-- Urinary / Renal -->
-	<Rule Keyword="painful urination" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="frequent urination" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="blood in urine" Weight="5" Tier="Hospital" />
-	<Rule Keyword="difficulty urinating" Weight="3" Tier="Hospital" />
-	<Rule Keyword="inability to urinate" Weight="6" Tier="Emergency" />
-	<Rule Keyword="cloudy urine" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="flank pain" Weight="3" Tier="Hospital" />
-
-	<!-- Reproductive / Gynecological -->
-	<Rule Keyword="menstrual cramps" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="heavy menstrual bleeding" Weight="3" Tier="Hospital" />
-	<Rule Keyword="irregular periods" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="vaginal discharge" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="pelvic pain" Weight="3" Tier="Hospital" />
-	<Rule Keyword="testicular pain" Weight="4" Tier="Hospital" />
-	<Rule Keyword="pregnancy bleeding" Weight="7" Tier="Emergency" />
-	<Rule Keyword="severe pregnancy pain" Weight="7" Tier="Emergency" />
-
-	<!-- Mental / Behavioral -->
-	<Rule Keyword="anxiety" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="panic attack" Weight="3" Tier="Hospital" />
-	<Rule Keyword="severe depression symptoms" Weight="4" Tier="Hospital" />
-	<Rule Keyword="suicidal thoughts" Weight="8" Tier="Emergency" />
-	<Rule Keyword="hallucinations" Weight="6" Tier="Emergency" />
-	<Rule Keyword="insomnia" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="mood swings" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="excessive sleepiness" Weight="1" Tier="LocalHealthUnit" />
-
-	<!-- Endocrine / Metabolic -->
-	<Rule Keyword="cold intolerance" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="heat intolerance" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="hair loss" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="tremor with weight loss" Weight="3" Tier="Hospital" />
-	<Rule Keyword="frequent urination with weight loss" Weight="3" Tier="Hospital" />
-
-	<!-- Trauma / Injury -->
-	<Rule Keyword="fracture suspected" Weight="5" Tier="Hospital" />
-	<Rule Keyword="open wound" Weight="4" Tier="Hospital" />
-	<Rule Keyword="deep cut" Weight="4" Tier="Hospital" />
-	<Rule Keyword="head injury" Weight="6" Tier="Emergency" />
-	<Rule Keyword="burns" Weight="5" Tier="Hospital" />
-	<Rule Keyword="severe burns" Weight="7" Tier="Emergency" />
-	<Rule Keyword="sprain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="animal bite" Weight="4" Tier="Hospital" />
-	<Rule Keyword="insect bite with swelling" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="snake bite" Weight="8" Tier="Emergency" />
-	<Rule Keyword="electric shock injury" Weight="7" Tier="Emergency" />
-	<Rule Keyword="near drowning" Weight="8" Tier="Emergency" />
-	<Rule Keyword="severe bleeding" Weight="7" Tier="Emergency" />
-
-	<!-- Poisoning / Toxicology -->
-	<Rule Keyword="suspected poisoning" Weight="7" Tier="Emergency" />
-	<Rule Keyword="drug overdose" Weight="8" Tier="Emergency" />
-	<Rule Keyword="accidental ingestion" Weight="6" Tier="Emergency" />
-	<Rule Keyword="carbon monoxide exposure" Weight="7" Tier="Emergency" />
-
-	<!-- Dental / Oral -->
-	<Rule Keyword="toothache" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="gum bleeding" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="mouth sores" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="jaw pain" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="swollen jaw" Weight="3" Tier="Hospital" />
-
-	<!-- Pediatric -->
-	<Rule Keyword="infant fever" Weight="4" Tier="Hospital" />
-	<Rule Keyword="poor feeding in infant" Weight="4" Tier="Hospital" />
-	<Rule Keyword="persistent crying in infant" Weight="3" Tier="Hospital" />
-	<Rule Keyword="lethargy in infant" Weight="6" Tier="Emergency" />
-	<Rule Keyword="failure to thrive" Weight="4" Tier="Hospital" />
-	<Rule Keyword="delayed developmental milestones" Weight="2" Tier="LocalHealthUnit" />
-
-	<!-- Additional General / Systemic -->
-	<Rule Keyword="dehydration" Weight="4" Tier="Hospital" />
-	<Rule Keyword="signs of infection at wound site" Weight="4" Tier="Hospital" />
-	<Rule Keyword="persistent hiccups" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="cold symptoms" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="flu-like symptoms" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="body odor change" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="pale skin" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="cyanosis" Weight="7" Tier="Emergency" />
-
-	<!-- Additional Respiratory -->
-	<Rule Keyword="sinus pressure" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="postnasal drip" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="stridor" Weight="7" Tier="Emergency" />
-
-	<!-- Additional Musculoskeletal -->
-	<Rule Keyword="shoulder pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="knee pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="hip pain" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="muscle weakness" Weight="3" Tier="Hospital" />
-
-	<!-- Additional Dermatological -->
-	<Rule Keyword="wound not healing" Weight="3" Tier="Hospital" />
-	<Rule Keyword="fungal skin infection" Weight="1" Tier="LocalHealthUnit" />
-	<Rule Keyword="boils" Weight="2" Tier="LocalHealthUnit" />
-
-	<!-- Additional Urinary / Reproductive -->
-	<Rule Keyword="urinary incontinence" Weight="2" Tier="LocalHealthUnit" />
-	<Rule Keyword="breast lump" Weight="4" Tier="Hospital" />
-	<Rule Keyword="Nipple discharge" Weight="3" Tier="Hospital" />
-
-	<!-- Environmental / Occupational -->
-	<Rule Keyword="heat exhaustion" Weight="5" Tier="Hospital" />
-	<Rule Keyword="heat stroke" Weight="8" Tier="Emergency" />
-	<Rule Keyword="hypothermia" Weight="7" Tier="Emergency" />
-	<Rule Keyword="frostbite" Weight="5" Tier="Hospital" />
+	<Rule Keyword="joint pain" Weight="1" Tier="LocalHealthUnit" />
+	<Rule Keyword="chills" Weight="1" Tier="LocalHealthUnit" />
 </TriageRules>
