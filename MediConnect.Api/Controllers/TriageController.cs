@@ -19,6 +19,7 @@ namespace MediConnect.Api.Controllers
             _triageLogService = triageLogService;
         }
 
+        // Scores symptoms AND saves a new log entry in one step.
         [Authorize]
         [HttpPost("assess")]
         public async Task<IActionResult> Assess([FromBody] TriageRequest request)
@@ -40,9 +41,53 @@ namespace MediConnect.Api.Controllers
                 Explanation = result.Explanation,
                 CreatedAt = DateTime.UtcNow
             };
-            await _triageLogService.AddLogAsync(log);
+            var saved = await _triageLogService.AddLogAsync(log);
 
-            return Ok(result);
+            var response = new TriageLogResponse
+            {
+                LogID = saved.LogID,
+                Symptoms = request.Symptoms,
+                Tier = result.Tier,
+                Score = result.Score,
+                Explanation = result.Explanation,
+                CreatedAt = saved.CreatedAt
+            };
+
+            return Ok(response);
+        }
+
+        // Re-scores symptoms AND updates an existing log entry.
+        [Authorize]
+        [HttpPut("log/{id}")]
+        public async Task<IActionResult> UpdateLog(int id, [FromBody] TriageRequest request)
+        {
+            if (request.Symptoms == null || request.Symptoms.Count == 0)
+                return BadRequest("Please provide at least one symptom.");
+
+            var existing = await _triageLogService.GetLogByIdAsync(id);
+            if (existing is null || existing.PatientID != request.PatientID)
+                return NotFound("Log entry not found.");
+
+            var result = _triageService.Assess(request.Symptoms);
+
+            existing.Symptoms = string.Join(", ", request.Symptoms);
+            existing.Tier = result.Tier;
+            existing.Score = result.Score;
+            existing.Explanation = result.Explanation;
+
+            var updated = await _triageLogService.UpdateLogAsync(existing);
+
+            var response = new TriageLogResponse
+            {
+                LogID = updated.LogID,
+                Symptoms = request.Symptoms,
+                Tier = result.Tier,
+                Score = result.Score,
+                Explanation = result.Explanation,
+                CreatedAt = updated.CreatedAt
+            };
+
+            return Ok(response);
         }
 
         [Authorize]
@@ -68,6 +113,25 @@ namespace MediConnect.Api.Controllers
             };
 
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpDelete("log/{id}")]
+        public async Task<IActionResult> DeleteLog(int id, [FromQuery] int patientId)
+        {
+            var success = await _triageLogService.DeleteLogAsync(id, patientId);
+            if (!success)
+                return NotFound("Log entry not found.");
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpDelete("history/patient/{patientId}")]
+        public async Task<IActionResult> ClearHistory(int patientId)
+        {
+            await _triageLogService.DeleteAllForPatientAsync(patientId);
+            return NoContent();
         }
     }
 }

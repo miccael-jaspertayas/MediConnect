@@ -56,6 +56,15 @@ namespace MediConnect.Mobile.Services
             return response.IsSuccessStatusCode;
         }
 
+        // Overload for PUT that returns a response body
+        public async Task<TResponse?> PutAsync<TRequest, TResponse>(string endpoint, TRequest body)
+        {
+            AttachAuthHeader();
+            var response = await _http.PutAsJsonAsync(endpoint, body);
+            if (!response.IsSuccessStatusCode) return default;
+            return await response.Content.ReadFromJsonAsync<TResponse>();
+        }
+
         public async Task<bool> DeleteAsync(string endpoint)
         {
             AttachAuthHeader();
