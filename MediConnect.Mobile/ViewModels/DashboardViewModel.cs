@@ -26,6 +26,24 @@ namespace MediConnect.Mobile.ViewModels
         private string _latestVitalsDate = string.Empty;
         public string LatestVitalsDate { get => _latestVitalsDate; set => SetProperty(ref _latestVitalsDate, value); }
 
+        private double _avgSystolic;
+        public double AvgSystolic { get => _avgSystolic; set => SetProperty(ref _avgSystolic, value); }
+
+        private double _avgDiastolic;
+        public double AvgDiastolic { get => _avgDiastolic; set => SetProperty(ref _avgDiastolic, value); }
+
+        private double _avgHeartRate;
+        public double AvgHeartRate { get => _avgHeartRate; set => SetProperty(ref _avgHeartRate, value); }
+
+        private double _avgTemperature;
+        public double AvgTemperature { get => _avgTemperature; set => SetProperty(ref _avgTemperature, value); }
+
+        private double _avgSpO2;
+        public double AvgSpO2 { get => _avgSpO2; set => SetProperty(ref _avgSpO2, value); }
+
+        private string _averageCountText = "";
+        public string AverageCountText { get => _averageCountText; set => SetProperty(ref _averageCountText, value); }
+
         public ICommand GoToVitalsCommand { get; }
         public ICommand GoToRecordsCommand { get; }
         public ICommand GoToTriageCommand { get; }
@@ -79,6 +97,18 @@ namespace MediConnect.Mobile.ViewModels
                 {
                     _session.UpdateMostRecentVital(latest);
                     ApplyLatestVital(latest);
+
+                    // --> CALCULATE AVERAGE OF LAST 3 VITALS HERE <--
+                    var lastThree = vitalsList.OrderByDescending(v => v.RecordedAt).Take(3).ToList();
+                    if (lastThree.Any())
+                    {
+                        AvgSystolic = Math.Round(lastThree.Average(v => (double)v.SystolicBP), 1);
+                        AvgDiastolic = Math.Round(lastThree.Average(v => (double)v.DiastolicBP), 1);
+                        AvgHeartRate = Math.Round(lastThree.Average(v => (double)v.HeartRate), 1);
+                        AvgTemperature = Math.Round(lastThree.Average(v => (double)v.Temperature), 1);
+                        AvgSpO2 = Math.Round(lastThree.Average(v => (double)v.SpO2), 1);
+                        AverageCountText = $"Last {lastThree.Count} entries";
+                    }
                 }
                 else
                 {

@@ -19,16 +19,7 @@
                        HorizontalOptions="Center" VerticalOptions="Center" TextColor="#1E2A38"/>
             </Grid>
 
-            <!-- Date -->
-            <VerticalStackLayout Spacing="6">
-                <Label Text="Date Recorded" FontAttributes="Bold" FontSize="13" TextColor="#1E2A38"/>
-                <Border Stroke="#D8DEE8" StrokeShape="RoundRectangle 12" BackgroundColor="White">
-                    <Grid ColumnDefinitions="Auto,*" Padding="12,2">
-                        <Label Grid.Column="0" Text="📅" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
-                        <DatePicker Grid.Column="1" Date="{Binding RecordedAt, Mode=TwoWay}" TextColor="#1E2A38" BackgroundColor="Transparent"/>
-                    </Grid>
-                </Border>
-            </VerticalStackLayout>
+           
 
             <!-- Temperature -->
             <VerticalStackLayout Spacing="6">

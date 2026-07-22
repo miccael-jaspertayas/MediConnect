@@ -22,6 +22,25 @@
                 HorizontalOptions="Center"
                 TextColor="#1C6F6F"/>
 
+
+            <Border BackgroundColor="{Binding AnalysisBadgeColor}" 
+        StrokeShape="RoundRectangle 12" 
+        Stroke="Transparent" 
+        Padding="14">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.04" Radius="6" Offset="0,2"/>
+                </Border.Shadow>
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Health Insight Summary" 
+               FontAttributes="Bold" 
+               FontSize="13" 
+               TextColor="{Binding AnalysisTextColor}"/>
+                    <Label Text="{Binding VitalsAnalysis}" 
+               FontSize="12" 
+               TextColor="{Binding AnalysisTextColor}"/>
+                </VerticalStackLayout>
+            </Border>
+
             <CollectionView ItemsSource="{Binding Vitals}">
 
                 <CollectionView.EmptyView>
