@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    xmlns:dtos="clr-namespace:MediConnect.Mobile.Dtos"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:MediConnect.Mobile.ViewModels"
     x:Class="MediConnect.Mobile.Views.DashboardPage"
@@ -121,7 +123,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Average of Last 3 Vitals Card -->
+            <!-- Vitals Trends Card -->
             <Border
                 Padding="18"
                 BackgroundColor="White"
@@ -132,75 +134,116 @@
                     <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
                 </Border.Shadow>
 
-                <VerticalStackLayout Spacing="12">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Average of Last 3 Readings" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
-                        <Label Grid.Column="1" Text="{Binding AverageCountText}" FontSize="11" TextColor="#A6AFBD" VerticalOptions="Center"/>
-                    </Grid>
+                <VerticalStackLayout Spacing="14">
 
-                    <!-- Average Stat chips -->
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <Label Text="Vitals Trends" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
 
-                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
-                            <VerticalStackLayout Spacing="2">
-                                <Label Text="Avg Blood Pressure" FontSize="10" TextColor="#7A8699"/>
-                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding AvgSystolic}"/>
-                                            <Span Text="/"/>
-                                            <Span Text="{Binding AvgDiastolic}"/>
-                                            <Span Text=" mmHg" FontSize="11" TextColor="#7A8699"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </VerticalStackLayout>
-                        </Border>
+                    <!-- Range toggle -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="Last 10" FontSize="11" Padding="12,6" CornerRadius="12"
+                                BackgroundColor="{Binding SelectedRange, Converter={StaticResource RangeToColorConverter}, ConverterParameter=0}"
+                                TextColor="{Binding SelectedRange, Converter={StaticResource RangeToTextColorConverter}, ConverterParameter=0}"
+                                Command="{Binding SetRangeCommand}" CommandParameter="0"/>
+                        <Button Text="1 Week" FontSize="11" Padding="12,6" CornerRadius="12"
+                                BackgroundColor="{Binding SelectedRange, Converter={StaticResource RangeToColorConverter}, ConverterParameter=1}"
+                                TextColor="{Binding SelectedRange, Converter={StaticResource RangeToTextColorConverter}, ConverterParameter=1}"
+                                Command="{Binding SetRangeCommand}" CommandParameter="1"/>
+                        <Button Text="All Time" FontSize="11" Padding="12,6" CornerRadius="12"
+                                BackgroundColor="{Binding SelectedRange, Converter={StaticResource RangeToColorConverter}, ConverterParameter=2}"
+                                TextColor="{Binding SelectedRange, Converter={StaticResource RangeToTextColorConverter}, ConverterParameter=2}"
+                                Command="{Binding SetRangeCommand}" CommandParameter="2"/>
+                    </HorizontalStackLayout>
 
-                        <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
-                            <VerticalStackLayout Spacing="2">
-                                <Label Text="Avg Heart Rate" FontSize="10" TextColor="#7A8699"/>
-                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding AvgHeartRate}"/>
-                                            <Span Text=" bpm" FontSize="11" TextColor="#7A8699"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </VerticalStackLayout>
-                        </Border>
+                    <!-- Blood Pressure -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Blood Pressure (mmHg)" FontSize="11" TextColor="#7A8699"/>
 
-                        <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
-                            <VerticalStackLayout Spacing="2">
-                                <Label Text="Avg Temperature" FontSize="10" TextColor="#7A8699"/>
-                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <!-- Wait, use AvgTemperature below! -->
-                                            <Span Text="{Binding AvgTemperature}"/>
-                                            <Span Text="°C" FontSize="11" TextColor="#7A8699"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </VerticalStackLayout>
-                        </Border>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                            <Label Grid.Column="0" Text="Sys" FontSize="10" TextColor="#1C6F6F" VerticalOptions="Center" WidthRequest="30"/>
+                            <charts:ChartView Grid.Column="1" HeightRequest="150" Chart="{Binding BpSystolicChart}"/>
+                        </Grid>
 
-                        <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="10">
-                            <VerticalStackLayout Spacing="2">
-                                <Label Text="Avg Blood Oxygen" FontSize="10" TextColor="#7A8699"/>
-                                <Label FontSize="16" FontAttributes="Bold" TextColor="#1E2A38">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding AvgSpO2}"/>
-                                            <Span Text="%" FontSize="11" TextColor="#7A8699"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </VerticalStackLayout>
-                        </Border>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                            <Label Grid.Column="0" Text="Dia" FontSize="10" TextColor="#6FA8A3" VerticalOptions="Center" WidthRequest="30"/>
+                            <charts:ChartView Grid.Column="1" HeightRequest="150" Chart="{Binding BpDiastolicChart}"/>
+                        </Grid>
+                    </VerticalStackLayout>
 
-                    </Grid>
+                    <!-- Heart Rate -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Heart Rate (bpm)" FontSize="11" TextColor="#7A8699"/>
+                        <charts:ChartView HeightRequest="150" Chart="{Binding HeartRateChart}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Temperature -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Temperature (°C)" FontSize="11" TextColor="#7A8699"/>
+                        <charts:ChartView HeightRequest="150" Chart="{Binding TemperatureChart}"/>
+                    </VerticalStackLayout>
+
+                    <!-- SpO2 -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Blood Oxygen — SpO2 (%)" FontSize="11" TextColor="#7A8699"/>
+                        <charts:ChartView HeightRequest="150" Chart="{Binding SpO2Chart}"/>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Recent Symptom Check-ins -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 16"
+                Stroke="Transparent"
+                IsVisible="{Binding HasCheckIns}">
+                <Border.Shadow>
+                    <Shadow Brush="#1E2A38" Opacity="0.06" Radius="8" Offset="0,2"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Recent Symptom Check-ins" FontSize="15" FontAttributes="Bold" TextColor="#1E2A38"/>
+
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding RecentCheckIns}" Spacing="8">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type dtos:TriageLogResponse}">
+                                <Border BackgroundColor="#F4F6FA" StrokeShape="RoundRectangle 10" Stroke="Transparent" Padding="12">
+                                    <VerticalStackLayout Spacing="6">
+
+                                        <Label Text="{Binding CreatedAt, Converter={StaticResource UtcToLocalTimeConverter}}" FontSize="11" TextColor="#A6AFBD"/>
+
+                                        <FlexLayout BindableLayout.ItemsSource="{Binding Symptoms}"
+                                                    Wrap="Wrap"
+                                                    Direction="Row"
+                                                    JustifyContent="Start"
+                                                    AlignItems="Start">         
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="x:String">
+                                                    <Border BackgroundColor="#E3F1F0"
+                                                            StrokeShape="RoundRectangle 12"
+                                                            Stroke="Transparent"
+                                                            Padding="10,4"
+                                                            Margin="0,0,6,6">
+                                                        <Label Text="{Binding .}" FontSize="11" TextColor="#1C6F6F" FontAttributes="Bold"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </FlexLayout>
+
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <Button
+                        Text="View Full History"
+                        Command="{Binding GoToTriageCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#1C6F6F"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        HorizontalOptions="Start"/>
                 </VerticalStackLayout>
             </Border>
 
