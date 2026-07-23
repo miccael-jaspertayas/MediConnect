@@ -220,7 +220,7 @@ namespace MediConnect.Mobile.ViewModels
         private async Task DeleteLogAsync(TriageLogResponse log)
         {
             bool confirm = await ShowConfirmAsync("Delete entry?",
-                $"Remove this logged check-in from {log.CreatedAt:MMM dd, yyyy}? This cannot be undone.");
+                $"Remove this logged check-in from {log.CreatedAt.ToLocalTime():MMM dd, yyyy}? This cannot be undone.");
             if (!confirm) return;
 
             var success = await _apiService.DeleteAsync($"api/triage/log/{log.LogID}?patientId={_session.PatientID}");

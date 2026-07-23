@@ -1,6 +1,7 @@
 ﻿using MediConnect.Mobile.Services;
 using MediConnect.Mobile.ViewModels;
 using MediConnect.Mobile.Views;
+using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace MediConnect.Mobile;
@@ -11,8 +12,8 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        builder
-            .UseMauiApp<App>();
+        builder.UseMauiApp<App>();
+        builder.UseMicrocharts();
 
 
         // Services

@@ -10,7 +10,11 @@
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <converters:BoolToEyeIconConverter x:Key="BoolToEyeIconConverter" />
-            
+            <converters:RangeToColorConverter x:Key="RangeToColorConverter" />
+            <converters:RangeToTextColorConverter x:Key="RangeToTextColorConverter" />
+            <converters:TierToColorConverter x:Key="TierToColorConverter" />
+            <converters:UtcToLocalTimeConverter x:Key="UtcToLocalTimeConverter" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

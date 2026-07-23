@@ -1,9 +1,10 @@
-﻿using MediConnect.Mobile.Models;
+﻿using MediConnect.Mobile.Dtos;
+using MediConnect.Mobile.Models;
 using MediConnect.Mobile.Services;
+using Microcharts;
 using Microsoft.Maui.Controls;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using SkiaSharp;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MediConnect.Mobile.ViewModels
@@ -13,6 +14,8 @@ namespace MediConnect.Mobile.ViewModels
         private readonly SessionService _session;
         private readonly VitalsService _vitalsService;
         private readonly ApiService _apiService;
+
+        private List<Vitals> _allVitals = new();
 
         private string _greeting = "Welcome!";
         public string Greeting { get => _greeting; set => SetProperty(ref _greeting, value); }
@@ -26,23 +29,39 @@ namespace MediConnect.Mobile.ViewModels
         private string _latestVitalsDate = string.Empty;
         public string LatestVitalsDate { get => _latestVitalsDate; set => SetProperty(ref _latestVitalsDate, value); }
 
-        private double _avgSystolic;
-        public double AvgSystolic { get => _avgSystolic; set => SetProperty(ref _avgSystolic, value); }
+        // History range toggle: 0 = Last 10, 1 = 1 Week, 2 = All Time
+        private int _selectedRange;
+        public int SelectedRange
+        {
+            get => _selectedRange;
+            set
+            {
+                if (SetProperty(ref _selectedRange, value))
+                    RebuildCharts();
+            }
+        }
 
-        private double _avgDiastolic;
-        public double AvgDiastolic { get => _avgDiastolic; set => SetProperty(ref _avgDiastolic, value); }
+        public ICommand SetRangeCommand { get; }
 
-        private double _avgHeartRate;
-        public double AvgHeartRate { get => _avgHeartRate; set => SetProperty(ref _avgHeartRate, value); }
+        private Chart _bpSystolicChart = new LineChart();
+        public Chart BpSystolicChart { get => _bpSystolicChart; set => SetProperty(ref _bpSystolicChart, value); }
 
-        private double _avgTemperature;
-        public double AvgTemperature { get => _avgTemperature; set => SetProperty(ref _avgTemperature, value); }
+        private Chart _bpDiastolicChart = new LineChart();
+        public Chart BpDiastolicChart { get => _bpDiastolicChart; set => SetProperty(ref _bpDiastolicChart, value); }
 
-        private double _avgSpO2;
-        public double AvgSpO2 { get => _avgSpO2; set => SetProperty(ref _avgSpO2, value); }
+        private Chart _heartRateChart = new LineChart();
+        public Chart HeartRateChart { get => _heartRateChart; set => SetProperty(ref _heartRateChart, value); }
 
-        private string _averageCountText = "";
-        public string AverageCountText { get => _averageCountText; set => SetProperty(ref _averageCountText, value); }
+        private Chart _temperatureChart = new LineChart();
+        public Chart TemperatureChart { get => _temperatureChart; set => SetProperty(ref _temperatureChart, value); }
+
+        private Chart _spO2Chart = new LineChart();
+        public Chart SpO2Chart { get => _spO2Chart; set => SetProperty(ref _spO2Chart, value); }
+
+        public ObservableCollection<TriageLogResponse> RecentCheckIns { get; } = new();
+
+        private bool _hasCheckIns;
+        public bool HasCheckIns { get => _hasCheckIns; set => SetProperty(ref _hasCheckIns, value); }
 
         public ICommand GoToVitalsCommand { get; }
         public ICommand GoToRecordsCommand { get; }
@@ -61,6 +80,7 @@ namespace MediConnect.Mobile.ViewModels
             GoToTriageCommand = new Command(async () => await Shell.Current.GoToAsync("//Triage"));
             GoToProfileCommand = new Command(async () => await Shell.Current.GoToAsync("ProfilePage"));
             LogoutCommand = new Command(Logout);
+            SetRangeCommand = new Command<string>(r => SelectedRange = int.Parse(r!));
 
             _session.OnVitalsUpdated += HandleVitalsUpdated;
         }
@@ -68,47 +88,38 @@ namespace MediConnect.Mobile.ViewModels
         public async void OnAppearing()
         {
             await LoadGreetingAsync();
-            await LoadLatestVitalsSummaryAsync();
+            await LoadVitalsAsync();
+            await LoadRecentCheckInsAsync();
         }
 
         private async Task LoadGreetingAsync()
         {
             try
             {
-                var patient = await _apiService.GetAsync<Dtos.PatientDto>($"api/patients/{_session.PatientID}");
+                var patient = await _apiService.GetAsync<PatientDto>($"api/patients/{_session.PatientID}");
                 Greeting = !string.IsNullOrWhiteSpace(patient?.Name)
-                    ? $"Welcome back, {patient.Name.Split(' ')[0]}!"
-                    : "Welcome back!";
+                    ? $"Welcome, {patient.Name.Split(' ')[0]}!"
+                    : "Welcome!";
             }
             catch
             {
-                Greeting = "Welcome back!";
+                Greeting = "Welcome!";
             }
         }
 
-        private async Task LoadLatestVitalsSummaryAsync()
+        private async Task LoadVitalsAsync()
         {
             try
             {
                 var vitalsList = await _vitalsService.GetVitalsAsync(_session.PatientID);
-                var latest = vitalsList.OrderByDescending(v => v.RecordedAt).FirstOrDefault();
+                _allVitals = vitalsList.OrderBy(v => v.RecordedAt).ToList(); // chronological, oldest first, for charting
 
+                var latest = _allVitals.LastOrDefault();
                 if (latest != null)
                 {
                     _session.UpdateMostRecentVital(latest);
                     ApplyLatestVital(latest);
-
-                    // --> CALCULATE AVERAGE OF LAST 3 VITALS HERE <--
-                    var lastThree = vitalsList.OrderByDescending(v => v.RecordedAt).Take(3).ToList();
-                    if (lastThree.Any())
-                    {
-                        AvgSystolic = Math.Round(lastThree.Average(v => (double)v.SystolicBP), 1);
-                        AvgDiastolic = Math.Round(lastThree.Average(v => (double)v.DiastolicBP), 1);
-                        AvgHeartRate = Math.Round(lastThree.Average(v => (double)v.HeartRate), 1);
-                        AvgTemperature = Math.Round(lastThree.Average(v => (double)v.Temperature), 1);
-                        AvgSpO2 = Math.Round(lastThree.Average(v => (double)v.SpO2), 1);
-                        AverageCountText = $"Last {lastThree.Count} entries";
-                    }
+                    RebuildCharts();
                 }
                 else
                 {
@@ -130,11 +141,87 @@ namespace MediConnect.Mobile.ViewModels
             HasVitals = true;
         }
 
+        private void RebuildCharts()
+        {
+            if (_allVitals.Count == 0) return;
+
+            IEnumerable<Vitals> filtered = SelectedRange switch
+            {
+                0 => _allVitals.TakeLast(10),
+                1 => _allVitals.Where(v => v.RecordedAt >= DateTime.Now.AddDays(-7)),
+                _ => _allVitals
+            };
+
+            var points = filtered.ToList();
+            if (points.Count == 0)
+                points = _allVitals.TakeLast(10).ToList();
+
+            BpSystolicChart = BuildLineChart(points, v => (float)(v.SystolicBP ?? 0), "#1C6F6F");
+            BpDiastolicChart = BuildLineChart(points, v => (float)(v.DiastolicBP ?? 0), "#6FA8A3");
+            HeartRateChart = BuildLineChart(points, v => (float)(v.HeartRate ?? 0), "#E5484D");
+            TemperatureChart = BuildLineChart(points, v => (float)(v.Temperature ?? 0), "#F5A623");
+            SpO2Chart = BuildLineChart(points, v => (float)(v.SpO2 ?? 0), "#4A90D9");
+        }
+
+        private static LineChart BuildLineChart(List<Vitals> points, Func<Vitals, float> selector, string hexColor)
+        {
+            var entries = points.Select(v => new ChartEntry(selector(v))
+            {
+                Label = v.RecordedAt.ToString("M/d"),
+                ValueLabel = selector(v).ToString("0.#"),
+                Color = SKColor.Parse(hexColor)
+            }).ToArray();
+
+            var min = entries.Min(e => e.Value) ?? 0f;
+            var max = entries.Max(e => e.Value) ?? 0f;
+            var range = max - min;
+            var padding = range == 0 ? 1f : range * 0.15f;
+
+            return new LineChart
+            {
+                Entries = entries,
+                LineMode = LineMode.Straight,
+                LineSize = 3,
+                PointSize = 6,
+                PointMode = PointMode.Circle,
+                LabelTextSize = 28,
+                BackgroundColor = SKColor.Empty,
+                MinValue = min - padding,
+                MaxValue = max + padding
+            };
+        }
+
+        private async Task LoadRecentCheckInsAsync()
+        {
+            try
+            {
+                var result = await _apiService.GetAsync<PagedResult<TriageLogResponse>>(
+                    $"api/triage/history/patient/{_session.PatientID}?page=1&pageSize=3");
+
+                RecentCheckIns.Clear();
+
+                if (result?.Items != null)
+                {
+                    foreach (var item in result.Items)
+                        RecentCheckIns.Add(item);
+                }
+
+                HasCheckIns = RecentCheckIns.Count > 0;
+            }
+            catch
+            {
+                HasCheckIns = false;
+            }
+        }
+
         private void HandleVitalsUpdated(Vitals updatedVitals)
         {
             if (updatedVitals != null)
             {
+                _allVitals.Add(updatedVitals);
+                _allVitals = _allVitals.OrderBy(v => v.RecordedAt).ToList();
                 ApplyLatestVital(updatedVitals);
+                RebuildCharts();
             }
         }
 
